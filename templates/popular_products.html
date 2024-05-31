@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Sales Report</h1>
+
+    <h2>Monthly Sales Volume</h2>
+    <p>This chart shows the monthly sales volume for each product.</p>
+
+    <div style="max-width: 800px; margin-bottom: 20px;">
+        <canvas id="salesChart"></canvas>
+    </div>
+
+    <h2>Most Popular Product</h2>
+    {% if most_popular_product %}
+        <p>Name: {{ most_popular_product.name }}</p>
+        <p>Total Orders: {{ most_popular_product.total_orders }}</p>
+    {% else %}
+        <p>No data available</p>
+    {% endif %}
+
+    <h2>Least Popular Product</h2>
+    {% if least_popular_product %}
+        <p>Name: {{ least_popular_product.name }}</p>
+        <p>Total Orders: {{ least_popular_product.total_orders }}</p>
+    {% else %}
+        <p>No data available</p>
+    {% endif %}
+
+    <h2>Total Orders Sum</h2>
+    {% if total_orders_sum %}
+        <p>Total Orders Sum: {{ total_orders_sum }}</p>
+    {% else %}
+        <p>No data available</p>
+    {% endif %}
+
+    <script>
+        var ctx = document.getElementById('salesChart').getContext('2d');
+
+        // Данные для диаграммы, переданные из Django
+        var monthlyVolumeData = [{% for product in monthly_volume %}{{ product.monthly_volume }},{% endfor %}];
+        var totalOrdersSum = {{ total_orders_sum }};
+
+        // Вычисляем размеры столбцов
+        var backgroundColors = monthlyVolumeData.map(function(volume) {
+            return 'rgba(255, 99, 132, ' + (volume / totalOrdersSum) + ')';
+        });
+
+        var salesChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [{% for product in monthly_volume %}"{{ product.name }}",{% endfor %}],
+                datasets: [{
+                    label: 'Monthly Sales Volume',
+                    data: monthlyVolumeData,
+                    backgroundColor: backgroundColors,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+</body>
+</html>

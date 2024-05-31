@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coupons Page</title>
+</head>
+<body>
+    <a href="/">Home</a>
+    <h1>Coupons</h1>
+    <p>Here you can find our latest coupons and discounts.</p>
+    <ul>{%for coupons in coupons%}
+        <li>
+            <h2>{{coupons.title}}</h2>
+            <p>{{coupons.description}}</p>
+            <p>Номер купона - {{coupons.number}}</p>
+            <p>{% if coupons.active %}
+                <p>Статус: Активный</p>
+            {% else %}
+                <p>Статус: Неактивный</p>
+            {% endif %}</p>
+        </li>
+         
+        {% endfor %}</ul>
+</body>
+</html>

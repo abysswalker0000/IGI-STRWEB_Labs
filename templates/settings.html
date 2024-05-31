@@ -1,0 +1,62 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+            <div> 
+
+                <h1><a href="/">Home</a> / Account Setting for <b>{{user.username}}</b> </h1>
+                <br>
+                <hr>
+                <div class="grid lg:grid-cols-3 mt-12 gap-8">
+                    <div>
+                        <h3 class="text-xl mb-2"> General</h3>
+                        <p></p>
+                    </div>
+                    <div class="bg-white rounded-md lg:shadow-lg shadow col-span-2">
+                        
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                       <div > 
+                            <div>
+
+                                <label for=""> Address</label>
+                                <input type="text" name="address" value="{{user_profile.address}}" >
+                            </div>
+                            <div>
+                                <label for=""> Phone number</label>
+                                <input type="tel" id="phone_number" name="phone_number" pattern="^\+375\d{2}\s?\d{3}\s?\d{2}\s?\d{2}$" title="Please enter phone number in the format +37529 XXXXXXX" value="{{ user_profile.phone_number }}"><br>
+                            </div>
+                            
+                       </div> 
+    
+                       <div >
+                           <button> <a href="/">Cancel</a> </button>
+                           <button type="submit">  Save </button>
+                       </div>
+                    </form>
+    
+                    </div>
+                    </div>
+                    <br>
+
+                </div>
+
+            </div>
+            
+        </div>
+
+    </div>
+
+</body>
+
+</html>
