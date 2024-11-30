@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% block title %} FAQ {% endblock %}
+
+{% block content %}
+<style>
+    .content-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 90vh;
+        padding: 20px; 
+        position: relative;
+    }
+
+    .black-box {
+        width: 110vh; 
+        height: 70vh;
+        background-color: black; 
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        border-radius: 10px;
+        border: 40px solid transparent;
+        box-shadow: 
+            0 0 25px rgba(0, 0, 0, 0.8), 
+            inset 0 0 30px rgba(0, 0, 0, 0.8);
+        background-clip: padding-box;
+        position: relative;
+    }
+
+    .black-box::before {
+        content: "";
+        position: absolute;
+        top: -40px;
+        left: -40px;
+        right: -40px;
+        bottom: -40px;
+        border-radius: 10px;
+        background-image: url("../static/textures/blackplastic.jpg"); 
+        background-size: cover;
+        filter: brightness(0.8) contrast(0.9) sepia(0.3);
+        box-shadow: 
+            inset 0 0 15px rgba(0, 0, 0, 0.9),
+            0 0 50px rgba(0, 0, 0, 0.7);
+        z-index: -1; 
+    }
+
+    .black-box::after {
+        content: "";
+        position: absolute;
+        bottom: -35px;
+        left: 95%; 
+        width: 30px;
+        height: 30px; 
+        background-image: url("../static/icons/power-button.png"); 
+        background-size: contain;
+        background-repeat: no-repeat;
+        z-index: 0;
+    }
+
+    .faq-header {
+        height: 7vh;
+        width: 100%;
+        background-color: #97e33b;
+        display: flex; 
+        align-items: center;
+        justify-content: flex-start;
+        padding-left: 20px; 
+        box-sizing: border-box; 
+        font-size: 20px; 
+        color: black;
+        text-shadow: none;
+        border: none;
+    }
+
+    .faq-info {
+        width: 100%;
+        height: 15vh;
+        background: repeating-linear-gradient(
+            -45deg,
+            rgba(11, 255, 11, 0.5), 
+            rgba(11, 255, 11, 0.5) 7px,
+            rgba(0, 170, 0, 0.5) 7px, 
+            rgba(0, 170, 0, 0.5) 15px
+        );
+    }
+
+    .faq-divider {
+        width: 100%;
+        height: 10px;
+        background-image: repeating-linear-gradient(
+            90deg,
+            #97e33b,
+            #97e33b 8px,
+            transparent 6px,
+            transparent 17px 
+        );
+        margin-top:5px; 
+    }
+
+    .faq-body {
+        display: flex; 
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
+        padding: 5px;
+        box-sizing: border-box;
+    }
+
+    .faq-left {
+        width: 48%;
+        max-height:50vh;
+        overflow-y: auto;
+    }
+
+    .faq-right {
+        width: 48%;
+        padding: 10px;
+        font-size:20px;
+        font-family: "Courier New", Courier;
+        color: #bbff00;
+        text-shadow: none;
+    }
+    
+    .faq-footer{
+        height:7vh;
+        display: flex;
+        align-items: center; 
+        font-size: 12px; 
+        font-family: "Courier New", Courier;
+    }
+
+    ul#faq-questions {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li.faq-question {
+        cursor: pointer;
+        padding: 10px;
+        background-color: transparent; 
+        color: #97e33b;
+        margin-bottom: 5px;
+        transition: background-color 0.3s;
+    }
+
+    li.faq-question:hover {
+        background-color: rgba(151, 227, 59, 0.5);
+    }
+    
+
+</style>
+
+<div class="content-wrapper">
+    <div class="black-box">
+        <div class="faq-header">FAQ</div>
+        <div class="faq-info"></div>
+        <div class="faq-divider"></div>
+        <div class="faq-body">
+            <div class="faq-left">
+                <ul id="faq-questions">
+                    {% for faq in faq %}
+                        <li data-answer="{{ faq.answer }}" data-date="{{ faq.answer_date }}" class="faq-question">{{ faq.question }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="faq-right">
+                <div id="answer-content">
+                    
+                </div>
+            </div>
+        </div>
+        <div class="faq-divider"></div>
+        <div class="faq-footer">Case: MW-5037-SCRE</div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const questions = document.querySelectorAll(".faq-question");
+        const answerContainer = document.getElementById("answer-content");
+    
+        let isPrinting = false;
+    
+        function printText(text, container, date) {
+            container.innerHTML = '';
+            let index = 0;
+            let totalText = text + `\nAnswered: ${date}`; // Объединяем текст ответа и дату
+    
+            isPrinting = true;
+    
+            const interval = setInterval(() => {
+                if (index < totalText.length) {
+                    container.innerHTML += totalText.charAt(index) === '\n' ? '<br>' : totalText.charAt(index);
+                    index++;
+                } else {
+                    clearInterval(interval);
+                    isPrinting = false;
+                }
+            }, 45);
+        }
+    
+        questions.forEach(question => {
+            question.addEventListener("click", function() {
+                const answer = this.getAttribute("data-answer");
+                const answerDate = this.getAttribute("data-date");
+    
+                if (!isPrinting) {
+                    printText(answer, answerContainer, answerDate);
+                }
+            });
+        });
+    });
+    
+</script>    
+{% endblock %}

@@ -1,0 +1,763 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Home {% endblock %}
+{% block content %}
+<style>
+    
+    .banners-row {
+        display: flex;
+        justify-content: center; 
+        background-color:black;
+    }
+    
+    .banners-row img {
+        width: 23%;
+        max-height: 350px; 
+        object-fit: cover; 
+    }
+    
+    .unHeader {
+        display: flex;
+        justify-content: center; 
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(5, 5, 5, 0.9), 
+            rgba(5, 5, 5, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 8px, 
+            rgba(18, 18, 18, 0.9) 15px
+        );
+        background-size: 70px 90px;
+        animation: moveStripes 30s linear infinite;
+        -webkit-text-stroke: 0.1px black;
+    }
+    .content-wrapper{
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(5, 5, 5, 0.9), 
+            rgba(5, 5, 5, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 8px, 
+            rgba(18, 18, 18, 0.9) 15px
+        );
+    }
+    
+    .partners {
+        border-top:5px solid #252525;
+        padding:1px;
+        font-family: 'Inkulinati-Regular', sans-serif;
+        text-align: center;
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(5, 5, 5, 0.9), 
+            rgba(5, 5, 5, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 8px, 
+            rgba(18, 18, 18, 0.9) 15px
+        );
+        background-size: 70px 180px;
+        animation: moveStripes 30s linear infinite;
+    }
+    
+    .partner {
+        width: 120px; 
+        height: 120px; 
+        {% comment %} background-color: black;  {% endcomment %}
+        border-radius: 50%; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+        overflow: hidden; 
+    }
+    
+    .partner .partner-image {
+        width: 120px;
+        height: 120px;
+        background-size: cover;
+        background-position: center
+    }
+
+    .partner img {
+        width: 100%; 
+        height: auto;
+        object-fit: cover;
+    }
+    
+    .partner-logos {
+        display: flex;
+        justify-content: center; 
+        flex-wrap: wrap; 
+        gap: 20px; 
+    }
+    .latest-news {
+        position: relative;
+    }
+    
+    .news-item {
+        position: absolute;
+        top: 20px;
+        left: 10px;
+    }
+    
+    
+    body {
+        padding: 0;
+        margin: 0;
+    }
+
+    blockquote[lang="en"] {
+        quotes: "“" "”" "‘" "’";  /*селектор атрибта*/
+    }
+
+    blockquote[lang="ru"] {
+        quotes: "«" "»" "„" "“"; 
+    }
+    .main-info {
+        position: static;
+        display: flex;
+        flex-direction: column; 
+        justify-content: center;
+        align-items: center; 
+        margin: 0 auto;
+        width: 50%;
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(5, 5, 5, 0.9), 
+            rgba(5, 5, 5, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 8px, 
+            rgba(18, 18, 18, 0.9) 15px
+        );
+        text-align: center; 
+        min-height:600px;
+    }
+    .preloader {
+        position: relative;
+        width: 100px;
+        height: 100px;
+    }
+    
+    .circle {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.5);
+        border: 5px solid rgba(255, 99, 71, 0.6); 
+        animation: color-change-border-horizontal 4s linear infinite;
+    }
+    
+
+    .circle-horizontal {
+        animation: rotate-horizontal 2s linear infinite, color-change-border-horizontal 4s linear infinite;
+    }
+    
+
+    .circle-vertical {
+        animation: rotate-vertical 2s linear infinite, color-change-border-vertical 4s linear infinite;
+    }
+    
+
+    .circle-diagonal {
+        transform: rotateZ(45deg);
+        animation: rotate-diagonal 2s linear infinite, color-change-border-diagonal 4s linear infinite;
+    }
+    
+
+    .circle-2diagonal {
+        transform: rotateZ(135deg);
+        animation: rotate-2diagonal 2s linear infinite, color-change-border-2diagonal 4s linear infinite;
+    }
+    
+
+    @keyframes color-change-border-horizontal {
+        0%, 100% {
+            border-color: rgba(255, 99, 71, 0.6); 
+        }
+        25% {
+            border-color: rgba(255, 215, 0, 0.6); 
+        }
+        50% {
+            border-color: rgba(173, 255, 47, 0.6); 
+        }
+        75% {
+            border-color: rgba(255, 69, 0, 0.6); 
+        }
+    }
+    
+
+    @keyframes color-change-border-vertical {
+        0%, 100% {
+            border-color: rgba(30, 144, 255, 0.6); 
+        }
+        25% {
+            border-color: rgba(0, 250, 154, 0.6); 
+        }
+        50% {
+            border-color: rgba(255, 20, 147, 0.6); 
+        }
+        75% {
+            border-color: rgba(138, 43, 226, 0.6); 
+        }
+    }
+    
+
+    @keyframes color-change-border-diagonal {
+        0%, 100% {
+            border-color: rgba(0, 255, 127, 0.6); 
+        }
+        25% {
+            border-color: rgba(255, 215, 0, 0.6); 
+        }
+        50% {
+            border-color: rgba(255, 105, 180, 0.6); 
+        }
+        75% {
+            border-color: rgba(30, 144, 255, 0.6); 
+        }
+    }
+    
+
+    @keyframes color-change-border-2diagonal {
+        0%, 100% {
+            border-color: rgba(255, 165, 0, 0.6); 
+        }
+        25% {
+            border-color: rgba(0, 255, 255, 0.6); 
+        }
+        50% {
+            border-color: rgba(173, 255, 47, 0.6); 
+        }
+        75% {
+            border-color: rgba(255, 20, 147, 0.6); 
+        }
+    }
+    
+    
+    @keyframes rotate-horizontal {
+        0% {
+            transform: rotateY(0deg);
+        }
+        100% {
+            transform: rotateY(360deg);
+        }
+    }
+
+    {% comment %} трип)@keyframes rotate-horizontal-crazy {
+        0% {
+            transform: rotate3d(1, 1, 1, 0deg);
+            filter: hue(0deg) !important
+        }
+        50% {
+            transform: rotate3d(1, 1, 1, 360deg);
+            filter: hue(360deg) !important
+        }
+        100% {
+            transform: rotate3d(1, 1, 1, 0deg);
+            filter: hue(0deg) !important
+        }
+    } {% endcomment %}
+    
+    @keyframes rotate-vertical {
+        0% {
+            transform: rotateX(0deg);
+        }
+        100% {
+            transform: rotateX(360deg);
+        }
+    }
+    
+    @keyframes rotate-diagonal {
+        0% {
+            transform: rotateZ(45deg) rotateY(0deg);
+        }
+        100% {
+            transform: rotateZ(45deg) rotateY(360deg);
+        }
+    }
+    
+    @keyframes rotate-2diagonal {
+        0% {
+            transform: rotateZ(135deg) rotateY(0deg);
+        }
+        100% {
+            transform: rotateZ(135deg) rotateY(360deg);
+        }
+    }
+    
+    /* Стили для слайдера */
+.slider {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+    overflow: hidden;
+    text-align: center;
+}
+
+.slider-wrapper {
+    display: flex;
+    transition: transform 0.5s ease;
+    
+}
+
+.slide {
+    min-width: 100%;
+    position: relative;
+}
+
+.slide img {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+}
+
+.caption {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.controls button {
+    width:100px;
+    font-family: 'SolidenTrialBold', sans-serif;
+    padding: 5px 15px;
+    background: repeating-linear-gradient(
+                -55deg,
+                #222,
+                #222 10px,
+                #333 10px,
+                #333 20px          
+            ); 
+            background-size: 73px 90px;
+            border: 2px solid black; 
+            color: white;
+            text-shadow: -1.1px -1.1px 1px #000, 1.1px -1.1px 1px #000, -1.1px 1.1px 1px #000, 1.1px 1.1px 1px #000;
+}
+.controls button:hover{
+    color: orange; 
+    animation: moveStripes 30s linear infinite;}
+
+#slide-number {
+    font-family: 'Inkulinati-Regular', sans-serif;
+}
+
+.pagination {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.dot {
+    height: 10px;
+    width: 10px;
+    margin: 0 5px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.dot.active {
+    background-color: #333;
+}
+#slider-config {
+    margin: 30px auto;
+    padding: 20px;
+    background: repeating-linear-gradient(
+        -40deg,
+        rgba(5, 5, 5, 0.9), 
+        rgba(5, 5, 5, 0.9) 8px,
+        rgba(18, 18, 18, 0.9) 8px, 
+        rgba(18, 18, 18, 0.9) 15px
+    );
+    background-size: 70px 90px;
+    border-radius: 10px;
+    max-width: 500px; 
+    text-align: left; 
+}
+
+
+#slider-config label {
+    font-family: 'Inkulinati-Regular', sans-serif;
+    font-size: 16px;
+    color: #fff;
+    display: block;
+    margin-bottom: 10px;
+}
+
+#slider-config input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+#slider-config input[type="number"] {
+    width: 100px;
+    padding: 5px;
+    border: 2px solid #333;
+    border-radius: 5px;
+    background-color: #252525;
+    color: #fff;
+}
+
+#apply-config {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-family: 'SolidenTrialBold', sans-serif;
+    background: repeating-linear-gradient(
+                -55deg,
+                #222,
+                #222 10px,
+                #333 10px,
+                #333 20px          
+            );
+    background-size: 73px 90px;
+    border: 2px solid black;
+    color: white;
+    text-shadow: -1.1px -1.1px 1px #000, 1.1px -1.1px 1px #000, -1.1px 1.1px 1px #000, 1.1px 1.1px 1px #000;
+    cursor: pointer;
+}
+
+#apply-config:hover {
+    color: orange; 
+    animation: moveStripes 30s linear infinite;}
+}
+
+/* Общие стили для формы и чекбоксов */
+#slider-config input {
+    margin-bottom: 15px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
+
+</style>
+
+<main>
+    <section class="unHeader">
+        <h1 class="gotic-font">Welcome In Da Hood</abbr>, <b>{{ user.username }}</b></h1>
+    </section>
+
+    <div class="content-wrapper">
+        <section class="slider">
+            <div class="slider-wrapper">
+                <div class="slide">
+                    <a href="https://example.com/link1">
+                    <img src="{% static 'banners/7.jpg' %}" alt="Banner 1">
+                    <div class="caption">First</div>
+                    </a>
+                </div>
+                <div class="slide">
+                    <a href="https://example.com/link2">
+                    <img src="{% static 'banners/6.jpg' %}" alt="Banner 2">
+                    <div class="caption">Second</div>
+                     </a>
+                </div>
+                <div class="slide">
+                    <a href="https://example.com/link3">
+                    <img src="{% static 'banners/8.jpg' %}" alt="Banner 3">
+                    <div class="caption">Third</div>
+                </a>
+                </div>
+            </div>
+        
+            <div id="slide-number" style="margin: 10px 0; font-size: 16px; text-align: center;"></div>
+        
+            <div class="controls">
+                <button class="prev">Previous</button>
+                <div class="pagination"></div>
+                <button class="next">Next</button>
+            </div>
+        </section>
+        {% if request.user.is_superuser %}
+        <form id="slider-config" style="margin-bottom: 20px;">
+            <label>
+                <input type="checkbox" id="loop" checked>
+                Loop (Листать слайдер по кругу)
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" id="navs" checked>
+                Navigation (Показывать стрелки)
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" id="pags" checked>
+                Pagination (Показывать пагинацию)
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" id="auto" checked>
+                Auto (Автопереключение)
+            </label>
+            <br>
+            <label>
+                <input type="checkbox" id="stopMouseHover" checked>
+                Pause on Hover (Пауза при наведении)
+            </label>
+            <br>
+            <label>
+                Delay (Задержка в секундах):
+                <input type="number" id="delay" value="5" min="1">
+            </label>
+            <br>
+            <button type="button" id="apply-config">Apply Settings</button>
+        </form>  
+        {% endif %}
+        
+        {% comment %} {% if request.user.is_superuser %}
+        <section class="admin-section">
+            <h1>For workers and admin:</h1>
+            <div>
+                <a href="/view_orders/"><button>Shop Orders</button></a>
+                <a href="/popular_products/"><button>Popular</button></a>
+            </div>
+        </section>
+        {% endif %} {% endcomment %}
+        <div class="main-info">
+            
+            <section class="interesting">
+                <h1>What's interesting?</h1>
+                <article class="latest-news">
+                    <h2>Последняя статья</h2>
+                        <div class="news-item">
+                            <h3><a href="news/{{ latest_news.id }}">{{ latest_news.title }}</a></h3>
+                            <p>{{ latest_news.smalldescription }}</p>
+                        </div>
+                </article>
+                
+            </section>  
+        </div>  
+    </div>
+</main>
+
+<footer>
+    <div class="partners">
+        <h2>Our partners</h2>
+        <div class="partner-logos">
+            <div class="preloader">
+                <div class="circle circle-horizontal"></div>
+                <div class="circle circle-vertical"></div>
+                <div class="circle circle-diagonal"></div>
+                <div class="circle circle-2diagonal"></div>
+            </div>
+            {% for partner in partners %}
+                <div class="partner">
+                    <a href="{{ partner.website }}" target="_blank">
+                        <div class="partner-image" style="background-image: url('{{ partner.logo.url }}')"></div>
+                        {% comment %} <img src="{{ partner.logo.url }}" alt="{{ partner.name }}"> {% endcomment %}
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</footer>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        class Slider {
+          constructor(options) {
+            this.sliderWrapper = document.querySelector(options.wrapper);
+            this.slides = document.querySelectorAll(options.slides);
+            this.prevButton = document.querySelector(options.prevButton);
+            this.nextButton = document.querySelector(options.nextButton);
+            this.pagination = document.querySelector(options.pagination);
+            this.slideNumber = document.querySelector(options.slideNumber);
+      
+            this.configForm = document.getElementById(options.configForm);
+            this.loopCheckbox = this.configForm?.querySelector('#loop');
+            this.navCheckbox = this.configForm?.querySelector('#navs');
+            this.pagCheckbox = this.configForm?.querySelector('#pags');
+            this.autoCheckbox = this.configForm?.querySelector('#auto');
+            this.stopMouseHoverCheckbox = this.configForm?.querySelector('#stopMouseHover');
+            this.delayInput = this.configForm?.querySelector('#delay');
+            this.applyConfigButton = this.configForm?.querySelector('#apply-config');
+      
+            this.currentIndex = 0;
+            this.autoPlayInterval = null;
+            this.autoDelay = 5000;
+            this.isLoopEnabled = true;
+            this.totalSlides = this.slides.length;
+      
+            this.initializeSlider();
+          }
+      
+          updateSlider() {
+            this.sliderWrapper.style.transform = `translateX(-${this.currentIndex * 100}%)`;
+            this.updatePagination();
+            if (this.slideNumber) {
+              this.slideNumber.textContent = `${this.currentIndex + 1} / ${this.totalSlides}`;
+            }
+          }
+      
+          updatePagination() {
+            if (this.pagination) {
+              this.pagination.innerHTML = '';
+              this.slides.forEach((_, index) => {
+                const dot = document.createElement('span');
+                dot.className = 'dot';
+                if (index === this.currentIndex) {
+                  dot.classList.add('active');
+                }
+                dot.addEventListener('click', () => this.goToSlide(index));
+                this.pagination.appendChild(dot);
+              });
+            }
+          }
+      
+          goToSlide(index) {
+            if (this.isLoopEnabled) {
+              this.currentIndex = (index + this.totalSlides) % this.totalSlides;
+            } else {
+              this.currentIndex = Math.max(0, Math.min(index, this.totalSlides - 1));
+            }
+            this.updateSlider();
+          }
+      
+          nextSlide() {
+            this.goToSlide(this.currentIndex + 1);
+          }
+      
+          prevSlide() {
+            this.goToSlide(this.currentIndex - 1);
+          }
+          
+      
+          startAutoPlay() {
+            if (this.autoDelay > 0) {
+              this.stopAutoPlay();
+              this.autoPlayInterval = setInterval(() => this.nextSlide(), this.autoDelay);
+            }
+          }
+      
+          stopAutoPlay() {
+            clearInterval(this.autoPlayInterval);
+          }
+
+          handleMouseEnter() {
+            this.stopAutoPlay();
+        }
+        
+        handleMouseLeave() {
+            this.startAutoPlay();
+        }
+        
+      
+          applySettings(savedConfig) {
+            if (savedConfig) {
+                this.isLoopEnabled = savedConfig.loop;
+        
+                // Видимость кнопок
+                if (this.prevButton) {
+                    this.prevButton.style.display = savedConfig.nav ? 'inline-block' : 'none';
+                }
+                if (this.nextButton) {
+                    this.nextButton.style.display = savedConfig.nav ? 'inline-block' : 'none';
+                }
+                if (this.pagination) {
+                    this.pagination.style.display = savedConfig.pag ? 'block' : 'none';
+                }
+        
+                // Автопрокрутка
+                this.autoDelay = parseInt(savedConfig.delay, 10) * 1000 || 5000;
+        
+                if (savedConfig.auto) {
+                    this.startAutoPlay();
+                } else {
+                    this.stopAutoPlay();
+                }
+        
+                // Удаляем старые обработчики событий
+                this.slides.forEach((slide) => {
+                    slide.removeEventListener('mouseenter', this.handleMouseEnter);
+                    slide.removeEventListener('mouseleave', this.handleMouseLeave);
+                });
+        
+                // Добавляем новые обработчики событий, если включена остановка при наведении
+                if (savedConfig.stopMouseHover) {
+                    this.slides.forEach((slide) => {
+                        slide.addEventListener('mouseenter', this.handleMouseEnter.bind(this));
+                        slide.addEventListener('mouseleave', this.handleMouseLeave.bind(this));
+                    });
+                }
+            }
+        }
+
+          saveSettings() {
+            if (this.configForm) {
+              const config = {
+                loop: this.loopCheckbox.checked,
+                nav: this.navCheckbox.checked,
+                pag: this.pagCheckbox.checked,
+                auto: this.autoCheckbox.checked,
+                stopMouseHover: this.stopMouseHoverCheckbox.checked,
+                delay: this.delayInput.value,
+              };
+      
+              localStorage.setItem('sliderConfig', JSON.stringify(config));
+              this.applySettings(config);
+            }
+          }
+      
+          loadSettings() {
+            const savedConfig = JSON.parse(localStorage.getItem('sliderConfig'));
+            if (savedConfig) {
+              this.applySettings(savedConfig);
+              if (this.configForm) {
+                this.loopCheckbox.checked = savedConfig.loop;
+                this.navCheckbox.checked = savedConfig.nav;
+                this.pagCheckbox.checked = savedConfig.pag;
+                this.autoCheckbox.checked = savedConfig.auto;
+                this.stopMouseHoverCheckbox.checked = savedConfig.stopMouseHover;
+                this.delayInput.value = savedConfig.delay;
+              }
+            } else {
+              this.applySettings({
+                loop: true,
+                nav: true,
+                pag: true,
+                auto: true,
+                stopMouseHover: true,
+                delay: 5,
+              });
+            }
+          }
+      
+          initializeSlider() {
+            this.loadSettings();
+            this.updateSlider();
+            this.updatePagination();
+      
+            if (this.applyConfigButton) {
+              this.applyConfigButton.addEventListener('click', () => this.saveSettings());
+            }
+            if (this.prevButton) {
+              this.prevButton.addEventListener('click', () => this.prevSlide());
+            }
+            if (this.nextButton) {
+              this.nextButton.addEventListener('click', () => this.nextSlide());
+            }
+          }
+        }
+      
+        new Slider({
+          wrapper: '.slider-wrapper',
+          slides: '.slide',
+          prevButton: '.prev',
+          nextButton: '.next',
+          pagination: '.pagination',
+          slideNumber: '#slide-number',
+          configForm: 'slider-config',
+        });
+      });      
+    
+</script>
+{% endblock %}

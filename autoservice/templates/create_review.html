@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Create Review
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .review-content-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        min-height: 60vh;
+        width:100%;
+        margin: auto;
+        font-family: 'Inkulinati-Regular', sans-serif;
+        box-sizing: border-box;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .review-striped-border {
+        border: 3px solid #454545;
+        text-align: center;
+        width: 50%;
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(20, 20, 20, 0.9), 
+            rgba(20, 20, 20, 0.9) 8px,
+            rgba(51, 51, 51, 0.9) 8px, 
+            rgba(51, 51, 51, 0.9) 15px
+        );
+        box-sizing: border-box;
+        -webkit-text-stroke: 0.5px black;
+    }
+
+    .review-form-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 30px;
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(5, 5, 5, 0.9), 
+            rgba(5, 5, 5, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 8px, 
+            rgba(18, 18, 18, 0.9) 15px
+        );
+        width: 50%;
+        box-sizing: border-box;
+        border: 3px solid #454545;
+    }
+
+    .review-button-container {
+        border: 3px solid #454545;
+        text-align: center;
+        width: 50%;
+        padding: 10px;
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(20, 20, 20, 0.9), 
+            rgba(20, 20, 20, 0.9) 8px,
+            rgba(51, 51, 51, 0.9) 8px, 
+            rgba(51, 51, 51, 0.9) 15px
+        );
+        box-sizing: border-box;
+    }
+
+    input, textarea, select {
+        resize: none;
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 2px solid #454545;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #cf9000;
+        font-size: 16px;
+        outline: none;
+        transition: border-color 0.3s, background-color 0.3s;
+        box-sizing: border-box;
+    }
+
+    input:focus, textarea:focus, select:focus {
+        border-color: #a37303;
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .review-button {
+        color: #cf9000;
+        background-color: #404040;
+        border: 1px solid black;
+        height: 40px;
+        width: 150px;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: crosshair;
+        margin: 0;
+    }
+
+    .review-button:hover {
+        border-color: #a37303;
+    }
+
+    .review-button:hover span {
+        animation: blink 0.9s infinite;
+    }
+
+    @keyframes blink {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0;
+        }
+    }
+</style>
+
+<div class="review-content-wrapper">
+    <div class="review-striped-border">
+        <h1>Create Review</h1>
+    </div>
+
+    <div class="review-form-body">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+        </form>
+    </div>
+
+    <div class="review-button-container">
+        <button class="review-button" type="submit">
+            <span>Submit</span>
+        </button>
+    </div>
+</div>
+
+{% endblock %}

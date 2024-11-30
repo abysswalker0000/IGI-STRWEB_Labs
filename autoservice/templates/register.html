@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Registration Page
+{% endblock %}
+
+{% block content %}
+<style>
+    .registration-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .registration-box {
+        background: rgba(0, 0, 0, 0.8); 
+        padding: 0;
+        border: 5px solid #454545;
+        height: 70vh;
+        display: flex;
+        flex-direction: column; 
+    }
+
+    .registration-title {
+        display: flex;
+        align-items: center; 
+        justify-content: center;
+        padding-left: 20px;
+        font-size: 30px;
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(20, 20, 20, 0.9), 
+            rgba(20, 20, 20, 0.9) 8px,
+            rgba(51, 51, 51, 0.9) 8px, 
+            rgba(51, 51, 51, 0.9) 15px
+        );
+        -webkit-text-stroke: 0.5px black;
+        height: 20%;
+    }
+
+    .registration-main {
+        flex-grow: 1; 
+        display: flex;
+        flex-direction: column; 
+        justify-content: center; 
+        align-items: center;
+        padding: 35px; 
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(5, 5, 5, 0.9), 
+            rgba(5, 5, 5, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 8px, 
+            rgba(18, 18, 18, 0.9) 15px
+        );
+    }
+
+    .registration-main div {
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center;
+        width: 100%;
+        max-width: 480px; 
+        margin-bottom: 15px; 
+    }
+
+    label.gotic-font {
+        flex: 0;
+        text-align: center;
+        font-size: 20px; 
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"],
+    input[type="number"] {
+        flex: 1; 
+        padding: 10px;
+        border: 2px solid #454545; 
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #cf9000; 
+        font-size: 16px; 
+        outline: none; 
+        width: 100%; 
+        transition: border-color 0.3s, background-color 0.3s; 
+        max-width: 350px; 
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    input[type="email"]:focus,
+    input[type="number"]:focus {
+        border-color: #a37303; 
+        background-color: rgba(255, 255, 255, 0.2); 
+    }
+
+    .registration-button-field {
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(20, 20, 20, 0.9), 
+            rgba(20, 20, 20, 0.9) 8px,
+            rgba(51, 51, 51, 0.9) 8px, 
+            rgba(51, 51, 51, 0.9) 15px
+        );
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+
+    .registration-button-divider {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-width: 750px;
+        width: 100%;
+        max-height: 200px;
+        height: 100%;
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(5, 5, 5, 0.9), 
+            rgba(5, 5, 5, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 8px, 
+            rgba(18, 18, 18, 0.9) 15px
+        );
+        background-size: 70px 90px;
+        animation: moveStripes 30s linear infinite;
+    }
+
+    .registration-button {
+        color: #cf9000;
+        background-color: #404040;
+        border: 1px solid black;
+        max-height: 40px;
+        height: 100%;
+        max-width: 200px;
+        width: 100%;
+        font-weight: 600;
+        font-size: 20px;
+        cursor: crosshair;
+    }
+
+    .registration-button:hover {
+        border-color: #a37303;
+    }
+
+    .registration-divider {
+        height: 5px; 
+        background-color: #373737; 
+        margin: 0; 
+        width: 750px; 
+    }
+
+    .register-link {
+        text-align: center; 
+    }
+
+    .registration-button:hover span {
+        animation: blink 0.9s infinite; 
+    }
+
+    @keyframes blink {
+        0%, 100% {
+            opacity: 1; 
+        }
+        50% {
+            opacity: 0; 
+        }
+    }
+</style>
+
+<div class="registration-container">
+    <div class="registration-box">
+        <section class="registration-title">
+            <h2 class="gotic-font" style="margin: 0; text-shadow: 0;">Create an account</h2>
+            {% for message in messages %}
+                <h5>{{ message }}</h5>
+            {% endfor %}
+        </section>
+        <div class="registration-divider"></div>
+
+        <form action="" method="POST">
+            <div class="registration-main">
+                {% csrf_token %}
+                <div>
+                    <label class="gotic-font" for="username">Name:</label>
+                    <input type="text" id="username" name="username" placeholder="Username" required>
+                </div>
+                <div>
+                    <label class="gotic-font" for="password">Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                </div>
+                <div>
+                    <label class="gotic-font" for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="Email" required>
+                </div>
+                <div>
+                    <label class="gotic-font" for="age">Age:</label>
+                    <input type="number" id="age" name="age" placeholder="Age" required>
+                </div>
+            </div>
+            <div class="registration-divider"></div>
+            <div class="registration-button-field">
+                <div class="registration-button-divider">
+                    <button class="registration-button" type="submit"><span>Register</span></button>
+                </div>
+            </div>
+        </form>
+        <div class="registration-divider"></div>
+        <div class="register-link">
+            <p>Already have an account? <a href="/login">Login</a></p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

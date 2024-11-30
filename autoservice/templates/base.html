@@ -1,0 +1,287 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Page Title{% endblock %}</title>
+    <link rel="shortcut icon" href="{% static 'logo_images/favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        @font-face {
+            font-family: 'Inkulinati-Regular';
+            src: url("{% static 'fonts/Inkulinati-Regular.otf' %}") format('opentype');
+        }
+        @font-face {
+            font-family: 'nfsmw';
+            src: url("{% static 'fonts/nfsmw.ttf' %}") format('truetype');
+        }
+        @font-face {
+            font-family: 'SolidenTrialBold'; 
+            src: url("{% static 'fonts/soliden-trial.bold-expanded.ttf' %}") format('truetype');
+        }
+        @font-face {
+            font-family: 'EraserDust';
+            src: url("{% static 'fonts/EraserDust.ttf' %}") format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        .gotic-font {
+            color: white;
+            font-family: 'Inkulinati-Regular', sans-serif;
+        }
+
+        .nfs-font {
+            color: white;
+            font-family: 'nfsmw', sans-serif;
+        }
+
+        .dust-font {
+            color: white;
+            font-family: 'EraserDust', sans-serif !important;
+            text-shadow: none;
+        }
+
+        body {
+            color: white;
+            font-family: 'SolidenTrialBold', sans-serif;
+            text-shadow: -1.1px -1.1px 1px #000, 1.1px -1.1px 1px #000, -1.1px 1.1px 1px #000, 1.1px 1.1px 1px #000;
+            margin: 0;
+            padding: 0;
+            background-image: url("{% static 'background/backgr.png' %}");
+            background-size: cover;
+        }
+
+        header {
+            background: radial-gradient(circle, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.7) 100%);
+            padding: 10px;
+            position: relative;
+        }
+
+        .timer-container {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border: 1px solid orange;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .timer-body {
+            text-align: center;
+        }
+
+        #timer-display {
+            font-family: 'Inkulinati-Regular', sans-serif;
+            font-size: 18px;
+            color: white;
+        }
+
+        .timer-body button {
+            background: repeating-linear-gradient(
+                -55deg,
+                #222,
+                #222 10px,
+                #333 10px,
+                #333 20px           /*Селектор классов:*/
+            ); 
+            background-size: 73px 90px;
+            border: 2px solid black; 
+            color: white;
+            text-shadow: -1.1px -1.1px 1px #000, 1.1px -1.1px 1px #000, -1.1px 1.1px 1px #000, 1.1px 1.1px 1px #000;
+            padding: 5px 10px;
+            text-align: center;
+            cursor: pointer;
+            font-family: 'SolidenTrialBold', sans-serif;
+            font-size: 12px;
+            letter-spacing: 1px;
+            width: 90px;  
+            height: 35px;  
+            box-sizing: border-box;   
+            overflow: hidden;    
+            cursor: crosshair;
+        }
+
+        .timer-body button:hover {
+            color: orange; 
+            animation: moveStripes 30s linear infinite;
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .logo img {
+            max-width: 400px;
+            height: auto;
+        }
+
+        .audio-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        .audio-icon {
+            color: white;
+            font-size: 30px;
+        }
+
+        .audio-icon:hover {
+            color: orange;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="timer-container">
+            <div class="timer-body">
+                <div id="timer-display">Loading...</div>
+                <button id="reset-timer">Reset Timer</button>
+            </div>
+        </div>
+
+        <div class="logo">
+            <a href="/">
+                <img src="{% static 'logo_images/nfsMW.png' %}" alt="logo1">
+            </a>
+        </div>
+
+        <div class="audio-controls" onclick="toggleAudio()">
+            <i id="audio-icon" class="fas fa-music audio-icon"></i>
+            <div class="nfs-font" id="audio-title">Now Playing: </div>
+        </div>
+
+        {% include 'navigation.html' %}
+    </header>
+    
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <audio id="background-audio" preload="auto"></audio>
+
+    <script>
+        const audioFiles = [
+            { src: "{% static 'audio/Control.mp3' %}", title: "We Control" },
+            { src: "{% static 'audio/Decadence.mp3' %}", title: "Decadence" },
+            { src: "{% static 'audio/Do Ya Thang.mp3' %}", title: "Do Ya Thang" },
+            { src: "{% static 'audio/Hand Of Blood.mp3' %}", title: "Hand Of Blood" },
+            { src: "{% static 'audio/Nine Thou.mp3' %}", title: "Nine Thou" },
+            { src: "{% static 'audio/Rock.mp3' %}", title: "I Am Rock" },
+        ];
+        const audio = document.getElementById('background-audio');
+        const audioIcon = document.getElementById('audio-icon');
+        const audioTitleDisplay = document.getElementById('audio-title');
+
+        function getRandomAudio() {
+            const randomIndex = Math.floor(Math.random() * audioFiles.length);
+            return audioFiles[randomIndex];
+        }
+
+        window.onload = function() {
+            const { src, title } = getRandomAudio();
+            audio.src = src;
+            audioTitleDisplay.innerText = "Now Playing: " + title;
+
+            if (sessionStorage.getItem("audioPlaying") === "true") {
+                audio.play();
+                audioIcon.classList.remove('fa-music');
+                audioIcon.classList.add('fa-volume-mute');
+            }
+        };
+
+        function toggleAudio() {
+            if (audio.paused) {
+                audio.play();
+                audioIcon.classList.remove('fa-music');
+                audioIcon.classList.add('fa-volume-mute');
+                sessionStorage.setItem("audioPlaying", "true");
+            } else {
+                audio.pause();
+                audioIcon.classList.remove('fa-volume-mute');
+                audioIcon.classList.add('fa-music');
+                sessionStorage.setItem("audioPlaying", "false");
+            }
+        }
+
+        class CountdownTimer {
+            constructor(timerElementId, resetButtonId, countdownDuration) {
+                this.timerDisplay = document.getElementById(timerElementId);
+                this.resetButton = document.getElementById(resetButtonId);
+                this.countdownDuration = countdownDuration; // Duration in milliseconds
+                this.storageKey = 'countdown-timer-end-time';
+                this.intervalId = null;
+
+                this.initialize();
+            }
+
+            initialize() {
+                this.resetButton.addEventListener('click', () => this.resetTimer());
+                const savedEndTime = localStorage.getItem(this.storageKey);
+
+                if (savedEndTime && new Date(savedEndTime) > new Date()) {
+                    this.endTime = new Date(savedEndTime);
+                } else {
+                    this.endTime = new Date(Date.now() + this.countdownDuration);
+                    localStorage.setItem(this.storageKey, this.endTime.toISOString());
+                }
+
+                this.startTimer();
+            }
+
+            startTimer() {
+                this.updateDisplay();
+                this.intervalId = setInterval(() => {
+                    if (this.isTimeUp()) {
+                        this.stopTimer();
+                        this.timerDisplay.textContent = 'Time is up!';
+                    } else {
+                        this.updateDisplay();
+                    }
+                }, 1000);
+            }
+
+            stopTimer() {
+                clearInterval(this.intervalId);
+            }
+
+            isTimeUp() {
+                return Date.now() >= this.endTime.getTime();
+            }
+
+            updateDisplay() {
+                const timeRemaining = this.endTime.getTime() - Date.now();
+                const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
+                const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+                this.timerDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes
+                    .toString()
+                    .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+
+            resetTimer() {
+                this.stopTimer();
+                this.endTime = new Date(Date.now() + this.countdownDuration);
+                localStorage.setItem(this.storageKey, this.endTime.toISOString());
+                this.startTimer();
+            }
+        }
+
+        // Initialize a 1-hour timer
+        new CountdownTimer('timer-display', 'reset-timer', 60 * 60 * 1000);
+    </script>
+</body>
+</html>

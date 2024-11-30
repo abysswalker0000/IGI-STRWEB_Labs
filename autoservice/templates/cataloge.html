@@ -1,0 +1,349 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Catalogue
+{% endblock %}
+
+{% block content %}
+<style>
+    /* Ваши существующие стили */
+
+    .catalogue-container {
+        display: flex;
+        justify-content: space-between;
+        font-family: 'Inkulinati-Regular', sans-serif;
+        width: 100%;
+        -webkit-text-stroke: 0.2px black;
+        height: calc(100vh - 120px);
+    }
+
+    .catalogue-title {
+        font-family: 'Inkulinati-Regular', sans-serif;
+        text-align: center;
+        -webkit-text-stroke: 0.2px black;
+        margin: 0;
+        padding: 0;
+        font-size:25px;
+    }
+
+    .catalogue-article {
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(5, 5, 5, 0.9),
+            rgba(5, 5, 5, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 15px
+        );
+        padding: 1px;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .filter-section {
+        width: 15%; 
+        padding: 20px;
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(80, 80, 80, 0.3),
+            rgba(80, 80, 80, 0.3) 8px,
+            rgba(120, 120, 120, 0.3) 8px,
+            rgba(120, 120, 120, 0.3) 15px
+        );
+        border-radius: 5px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+     
+    }
+
+    .product-section {
+        width: 80%; /* Уменьшил ширину для отступа от фильтра */
+        padding: 20px;
+        overflow-y: auto;
+        max-height: calc(100vh - 120px);
+        /* Убираем position и z-index */
+    }
+
+    .product-section h2 {
+        text-align: center; /* Центрируем заголовок */
+    }
+
+    .product-list {
+        list-style-type: none;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Центрируем карточки */
+    }
+
+    .product-list li {
+        width: 80%; /* Устанавливаем ширину 80% */
+        margin-bottom: 20px;
+        padding: 15px;
+        border-radius: 5px;
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(80, 80, 80, 0.3),
+            rgba(80, 80, 80, 0.3) 8px,
+            rgba(120, 120, 120, 0.3) 8px,
+            rgba(120, 120, 120, 0.3) 15px
+        );
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+        position: relative;
+        z-index: 1; /* Устанавливаем z-index для корректного отображения */
+    }
+
+    .product-list li:hover {
+        transform: perspective(600px) rotateY(5deg); /* Меняем угол поворота и направление */
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+
+    .filter-button {
+        color: #cf9000;
+        background-color: #404040;
+        border: 1px solid black;
+        height: 30px;
+        width: 120px;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer; /* Изменил курсор на pointer */
+        margin-top:5px;
+        transition: all 0.3s ease-out;
+    }
+
+    .filter-button:hover {
+        border-color: #a37303;
+    }
+
+    .filter-button:hover span {
+        animation: blink 0.9s infinite;
+    }
+
+    @keyframes blink {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0;
+        }
+    }
+
+    .product-details-button {
+        background-color: #007bff;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .product-details-button:hover {
+        background-color: #0056b3;
+    }
+
+    .catalogue-footer {
+        background-color: black;
+        color: white;
+        text-align: center;
+        padding: 10px 0;
+        position: relative;
+        bottom: 0;
+        width: 100%;
+        height: 40px;
+        box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .catalogue-footer p {
+        margin: 0;
+        font-size: 14px;
+    }
+
+    input[type="number"] {
+        flex: 1;
+        padding: 10px;
+        margin:2px;
+        border: 2px solid #454545;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #cf9000;
+        font-size: 14px; /* Увеличил размер шрифта для удобства */
+        outline: none;
+        max-width:120px;
+        width:100%;
+        transition: border-color 0.3s, background-color 0.3s;
+    }
+
+    input[type="number"]:focus {
+        border-color: #a37303;
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Стили для пагинации */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .pagination button {
+        color: #cf9000;
+        padding: 8px 12px;
+        margin: 0 4px;
+        background: none;
+        border: 1px solid #454545;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .pagination button:hover {
+        background-color: #454545;
+    }
+
+    .pagination .disabled {
+        color: #777;
+        border-color: #777;
+        cursor: default;
+    }
+</style>
+
+<div class="catalogue-article">
+    <div class="catalogue-title">
+        <h1>Catalogue</h1>
+    </div>
+
+    <div class="catalogue-container">
+        <!-- Секция фильтров -->
+        <section class="filter-section">
+            <h2>Filter Products</h2>
+            <form id="filter-form">
+                <label for="min_price">Min Price:</label>
+                <input type="number" step="1" id="min_price" name="min_price" value="{{ request.GET.min_price }}" aria-label="Minimum price">
+
+                <label for="max_price">Max Price:</label>
+                <input type="number" step="1" id="max_price" name="max_price" value="{{ request.GET.max_price }}" aria-label="Maximum price">
+
+                <button type="submit" class="filter-button"><span>Filter</span></button>
+            </form>
+        </section>
+
+        <!-- Секция продуктов -->
+        <section class="product-section">
+            <h2>Product List</h2>
+            <ul class="product-list" id="product-list">
+                {% for product in products %}
+                    <li data-price="{{ product.price }}">
+                        <span>{{ product.name }}</span>
+                        <p>Price: <span>${{ product.price }}</span></p>
+                        <form method="get" action="{% url 'product_detail' product.id %}" style="display:inline;">
+                            <button type="submit" class="filter-button" aria-label="View details for {{ product.name }}">
+                                <span>More Details</span>
+                            </button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <!-- Пагинация -->
+            <div class="pagination" id="pagination"></div>
+        </section>
+    </div>
+</div>
+
+<!-- Футер -->
+<footer class="catalogue-footer">
+    <p>There are no refunds for goods sold or services provided.</p>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const productList = document.getElementById('product-list');
+        const allProducts = Array.from(productList.children);
+        const pagination = document.getElementById('pagination');
+        const itemsPerPage = 3;
+        let currentPage = 1;
+
+        function filterProducts() {
+            const minPrice = parseFloat(document.getElementById('min_price').value) || 0;
+            const maxPrice = parseFloat(document.getElementById('max_price').value) || Infinity;
+            return allProducts.filter(product => {
+                const price = parseFloat(product.getAttribute('data-price'));
+                if (price >= minPrice && price <= maxPrice) {
+                    product.dataset.visible = "true";
+                    return true;
+                } else {
+                    product.dataset.visible = "false";
+                    return false;
+                }
+            });
+        }
+
+        function displayProducts(page) {
+            productList.innerHTML = '';
+            const filteredProducts = filterProducts();
+            const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+            if (page > totalPages && totalPages > 0) {
+                currentPage = totalPages;
+            }
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedItems = filteredProducts.slice(start, end);
+
+            if (paginatedItems.length === 0) {
+                productList.innerHTML = '<p>No products available.</p>';
+            } else {
+                paginatedItems.forEach(item => {
+                    productList.appendChild(item);
+                });
+            }
+            updatePagination(filteredProducts.length);
+        }
+
+        function updatePagination(totalItems) {
+            pagination.innerHTML = '';
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+            const prevButton = document.createElement('button');
+            prevButton.textContent = '« Previous';
+            if (currentPage > 1) {
+                prevButton.addEventListener('click', function() {
+                    currentPage--;
+                    displayProducts(currentPage);
+                });
+            } else {
+                prevButton.classList.add('disabled');
+                prevButton.disabled = true;
+            }
+            pagination.appendChild(prevButton);
+
+            const pageIndicator = document.createElement('span');
+            pageIndicator.textContent = 'Page ' + currentPage + ' of ' + totalPages;
+            pageIndicator.style.padding = '8px 12px';
+            pageIndicator.style.margin = '0 4px';
+            pagination.appendChild(pageIndicator);
+
+            const nextButton = document.createElement('button');
+            nextButton.textContent = 'Next »';
+            if (currentPage < totalPages) {
+                nextButton.addEventListener('click', function() {
+                    currentPage++;
+                    displayProducts(currentPage);
+                });
+            } else {
+                nextButton.classList.add('disabled');
+                nextButton.disabled = true;
+            }
+            pagination.appendChild(nextButton);
+        }
+
+        // Фильтрация продуктов по цене
+        const filterForm = document.getElementById('filter-form');
+        filterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            currentPage = 1;
+            displayProducts(currentPage);
+        });
+
+        // Инициализируем отображение продуктов
+        displayProducts(currentPage);
+    });
+</script>
+
+{% endblock %}

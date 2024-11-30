@@ -1,0 +1,288 @@
+{% extends 'base.html' %}
+{% block title %} Login {% endblock %}
+{% block content %}
+<style>
+    /* Ваши существующие стили */
+
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction:column;
+        height: 80vh;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .login-box {
+        background: rgba(0, 0, 0, 0.8); 
+        padding: 0;
+        border: 5px solid #454545;
+        max-width: 750px;
+        width: 100%;
+        max-height: 450px;
+        height: 100%;
+        display: flex;
+        flex-direction: column; 
+    }
+
+    .login-title {
+        display: flex;
+        align-items: center; 
+        justify-content:center;
+        padding-left: 20px;
+        font-size: 30px;
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(20, 20, 20, 0.9), 
+            rgba(20, 20, 20, 0.9) 8px,
+            rgba(51, 51, 51, 0.9) 8px, 
+            rgba(51, 51, 51, 0.9) 15px
+        );
+        -webkit-text-stroke: 0.5px black;
+        height: 20%;
+    }
+
+    .login-main {
+        flex-grow: 1; 
+        display: flex;
+        flex-direction: column; 
+        justify-content: center; 
+        align-items: center;
+        padding: 65px; 
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(5, 5, 5, 0.9), 
+            rgba(5, 5, 5, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 8px, 
+            rgba(18, 18, 18, 0.9) 15px
+        );
+    }
+
+    .login-main div {
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center;
+        width: 100%;
+        max-width: 480px; 
+        margin-bottom: 15px; 
+    }
+
+    label.gotic-font {
+        flex: 0;
+        text-align: center;
+        font-size: 20px; 
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        flex: 1; 
+        padding: 10px;
+        border: 2px solid #454545; 
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #cf9000; 
+        font-size: 16px; 
+        outline: none; 
+        width: 100%; 
+        transition: border-color 0.3s, background-color 0.3s; 
+        max-width: 350px; 
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+        border-color: #a37303; 
+        background-color: rgba(255, 255, 255, 0.2); 
+    }
+
+    .login-button-field {
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(20, 20, 20, 0.9), 
+            rgba(20, 20, 20, 0.9) 8px,
+            rgba(51, 51, 51, 0.9) 8px, 
+            rgba(51, 51, 51, 0.9) 15px
+        );
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+
+    .login-button-divider {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-width: 750px;
+        width: 100%;
+        max-height: 200px;
+        height: 100%;
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(5, 5, 5, 0.9), 
+            rgba(5, 5, 5, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 8px, 
+            rgba(18, 18, 18, 0.9) 15px
+        );
+        background-size: 70px 90px;
+        animation: moveStripes 30s linear infinite;
+    }
+
+    .login-button {
+        color: #cf9000;
+        background-color: #404040;
+        border: 1px solid black;
+        max-height: 40px;
+        height: 100%;
+        max-width: 200px;
+        width: 100%;
+        font-weight: 600;
+        font-size: 20px;
+        cursor: crosshair;
+    }
+
+    .login-button:hover {
+        border-color: #a37303;
+    }
+
+    .login-divider {
+        height: 5px; 
+        background-color: #373737; 
+        margin: 0; 
+        width: 750px; 
+    }
+
+    .register-link {
+        text-align: center; 
+    }
+
+    .login-button:hover span {
+        animation: blink 0.9s infinite; 
+    }
+
+    /* Стили для кнопки проверки возраста */
+    .age-button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .age-button {
+        color: #cf9000;
+        background-color: #404040;
+        border: 1px solid black;
+        height: 40px;
+        width: 200px;
+        font-weight: 600;
+        font-size: 15px;
+        cursor: pointer;
+        transition: border-color 0.3s;
+    }
+
+    .age-button:hover {
+        border-color: #a37303;
+    }
+
+    .age-button:hover span {
+        animation: blink 0.9s infinite; 
+    }
+
+    @keyframes blink {
+        0%, 100% {
+            opacity: 1; 
+        }
+        50% {
+            opacity: 0; 
+        }
+    }
+</style>
+
+<!-- Оборачиваем контент в div с классом 'service_wrapper' -->
+<div class="service_wrapper">
+    <div class="login-container">
+        <div class="login-box">
+            <section class="login-title">
+                <h2 class="gotic-font" style="margin: 0; text-shadow:0;">Welcome back</h2>
+                {% for message in messages %}
+                    <h5>{{ message }}</h5>
+                {% endfor %}
+            </section>
+            <div class="login-divider"></div>
+
+            <form action="" method="POST">
+                <div class="login-main">
+                    {% csrf_token %}
+                    <div>
+                        <label class="gotic-font" for="username">Name:</label>
+                        <input type="text" id="username" name="username" placeholder="Username" required>
+                    </div>
+                    <div>
+                        <label class="gotic-font" for="password">Password:</label>
+                        <input type="password" id="password" name="password" placeholder="Password" required>
+                    </div>
+                </div>
+                <div class="login-divider"></div>
+                <div class="login-button-field">
+                    <div class="login-button-divider">
+                        <button class="login-button" type="submit"><span>Accept</span></button>
+                    </div>
+                </div>
+            </form>
+            <div class="login-divider"></div>
+            <div class="register-link">
+                <p>Don't have an account yet? <a href="/register">Register</a></p>
+            </div>
+        </div>
+        <div class="age-button-container">
+    <button class="age-button" type="button" onclick="checkAge()"><span>Проверить возраст</span></button>
+</div>
+    </div>
+    
+</div>
+
+<!-- Добавляем кнопку для проверки возраста -->
+
+
+<script>
+    function checkAge() {
+        let content = document.querySelector('.service_wrapper');
+        let age = 0
+        let birth_timestamp = null;
+        try {
+            birth_timestamp = new Date(prompt('Date of birth in YYYY-MM-DD format', (new Date()).toISOString().split('T')[0]))
+            let today_timestamp = new Date()
+            age = getFullYearDifference(birth_timestamp, today_timestamp)
+        } catch (Exception) {} finally {
+            if (age > 18) {
+                alert("Day of the week of your birth date: " + getDayOfWeek(new Date(birth_timestamp)))
+            } else {
+                alert("Too young. unlucky for u.")
+            }
+        }
+
+        function getFullYearDifference(startDate, endDate) {
+            // Вычисление разницы в полных годах между двумя датами
+            let yearDiff = endDate.getFullYear() - startDate.getFullYear();
+
+            // Корректировка, если день рождения еще не наступил в текущем году
+            const endMonth = endDate.getMonth();
+            const endDay = endDate.getDate();
+            const startMonth = startDate.getMonth();
+            const startDay = startDate.getDate();
+
+            if (endMonth < startMonth || (endMonth === startMonth && endDay < startDay)) {
+                yearDiff--;
+            }
+
+            return yearDiff;
+        }
+
+        function getDayOfWeek(date) {
+            const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            return daysOfWeek[date.getDay()];
+        }
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page</title>
+    <style>
+
+        nav a {
+            margin: 0 5px;  /* Селектор элементов:*/
+            text-decoration: none;
+        }
+        
+        .nav-button {
+            background: repeating-linear-gradient(
+                -55deg,
+                #222,
+                #222 10px,
+                #333 10px,
+                #333 20px           /*Селектор классов:*/
+            ); 
+            background-size: 73px 90px;
+            border: 2px solid black; 
+            color: white;
+            text-shadow: -1.1px -1.1px 1px #000, 1.1px -1.1px 1px #000, -1.1px 1.1px 1px #000, 1.1px 1.1px 1px #000;
+            padding: 5px 10px;
+            text-align: center;
+            cursor: pointer;
+            font-family: 'SolidenTrialBold', sans-serif;
+            font-size: 12px;
+            letter-spacing: 1px;
+            width: 90px;  
+            height: 35px;  
+            box-sizing: border-box;   
+            overflow: hidden;    
+            cursor: crosshair;
+        }
+        
+        .nav-button:hover {
+            color: orange; 
+            animation: moveStripes 30s linear infinite;
+        }        
+        
+        @keyframes moveStripes {
+            from { background-position: 0 0; }
+            to { background-position: 800px 0; }
+        }
+        nav {
+            display: flex;
+            justify-content: space-evenly; 
+            align-items: center; 
+            flex-wrap: wrap;             
+        }   
+        
+    </style>
+    <nav>
+        <a href="/"><button class="nav-button">Home</button></a>
+        <a href="/about/"><button class="nav-button">About</button></a>
+        <a href="/contacts/"><button class="nav-button">Contacts</button></a>
+        <a href="/coupons/"><button class="nav-button">Coupons</button></a>
+        <a href="/faq/"><button class="nav-button">FAQ</button></a>
+        <a href="/news/"><button class="nav-button">News</button></a>
+        <a href="/policy/"><button class="nav-button">Policy</button></a>
+        <a href="/review_list/"><button class="nav-button">Reviews</button></a>
+        <a href="/vacancy/"><button class="nav-button">Vacancy</button></a>
+        <a href="/cart/"><button class="nav-button">Cart</button></a>
+        <a href="/login/"><button class="nav-button">Logout</button></a>
+        <a href="/cataloge/"><button class="nav-button">Cataloge</button></a>
+        <a href="/settings/"><button class="nav-button">Animation</button></a>
+    </nav>
+    

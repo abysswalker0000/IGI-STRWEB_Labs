@@ -1,0 +1,547 @@
+{% extends 'base.html' %}
+
+{% block title %}Coupons{% endblock %}
+
+{% block content %}
+
+<style>
+    .coupon-content-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 80vh;
+        width: 100%;
+        margin: auto;  
+        font-family: 'Inkulinati-Regular', sans-serif;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .coupon-striped-border {
+        border: 1px solid black;
+        text-align: center;
+        width: 70%; 
+        background: repeating-linear-gradient(
+            -35deg,
+            rgba(20, 20, 20, 0.9), 
+            rgba(20, 20, 20, 0.9) 10px,
+            rgba(51, 51, 51, 0.9) 10px, 
+            rgba(51, 51, 51, 0.9) 20px
+        );
+        -webkit-text-stroke: 0.5px black;
+    }
+
+    .coupon-list-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        width: 70%;
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(5, 5, 5, 0.9), 
+            rgba(5, 5, 5, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 8px, 
+            rgba(18, 18, 18, 0.9) 15px
+        );
+        max-height: 400px; 
+        overflow-y: auto;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        width: 100%;
+    }
+
+    li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px; 
+        margin: 5px 0; 
+    }
+
+    li:nth-child(even) {
+        background: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0.2),
+            rgba(245, 245, 245, 0.5)
+        );
+    }
+
+    li:nth-child(odd) {
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(5, 5, 5, 0.9),
+            rgba(5, 5, 5, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 15px
+        ); 
+    }
+
+    .coupon-text {
+        flex: 2;
+        padding-right: 10px; 
+        color: #fff;
+        margin-left: 10px;
+    }
+
+    .coupon-info {
+        flex: 1;
+        text-align: center; 
+        font-size: 24px;
+        color: #fff;
+    }
+
+    .coupon-info span {
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        border-radius: 50%;
+        font-size: 20px;
+    }
+
+    /* Стили для секции студентов */
+    .student-section {
+        margin-top: 50px;
+        width: 70%;
+        margin: 50px auto;
+        font-family: 'Inkulinati-Regular', sans-serif;
+        color: #fff;
+    }
+
+    .student-section h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .student-form {
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .student-form label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .student-form input,
+    .student-form select {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+    }
+
+    .student-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .student-table th,
+    .student-table td {
+        border: 1px solid #fff;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .student-table th {
+        background-color: rgba(20, 20, 20, 0.9);
+    }
+
+    .student-table td {
+        background-color: rgba(5, 5, 5, 0.7);
+    }
+
+    .student-section button {
+        padding: 10px 20px;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+
+    .result {
+        margin-top: 20px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    /* Стили для переключателя вариантов */
+    .variant-switcher {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .variant-switcher button {
+        padding: 8px 15px;
+        margin: 0 5px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="coupon-content-wrapper">
+    <div class="coupon-striped-border">
+        <h1>Coupons</h1>
+        <p>Here you can find our latest coupons and discounts.</p>
+    </div>
+
+    <div class="coupon-list-body">
+        <ul>
+            {% for coupon in coupons %}
+            <li>
+                <div class="coupon-text">
+                    <h2>{{ coupon.title }}</h2>
+                    <p>{{ coupon.description }}</p>
+                </div>
+                <div class="coupon-info">
+                    {% if coupon.active %}
+                        <span class="active">✔</span>
+                    {% else %}
+                        <span class="inactive">✖</span>
+                    {% endif %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="coupon-striped-border" style="padding-top: 10px; padding-bottom: 10px;">
+    </div>
+</div>
+
+<!-- Новый блок для реализации задания -->
+<div class="student-section">
+    <h2>Задание: Студенты</h2>
+
+    <!-- Переключатель вариантов -->
+    <div class="variant-switcher">
+        <button id="use-functional">Вариант 1: Функциональное наследование</button>
+        <button id="use-class">Вариант 2: Class / Extends</button>
+    </div>
+
+    <!-- Форма для добавления студента -->
+    <div class="student-form">
+        <h3>Добавить студента</h3>
+        <form id="student-form">
+            <label for="lastName">Фамилия:</label>
+            <input type="text" id="lastName" required>
+
+            <label for="firstName">Имя:</label>
+            <input type="text" id="firstName" required>
+
+            <label for="patronymic">Отчество:</label>
+            <input type="text" id="patronymic">
+
+            <label for="gender">Пол:</label>
+            <select id="gender" required>
+                <option value="Мужской">Мужской</option>
+                <option value="Женский">Женский</option>
+            </select>
+
+            <label for="age">Возраст (16-35):</label>
+            <input type="number" id="age" min="16" max="35" required>
+
+            <label for="course">Курс (1-5):</label>
+            <input type="number" id="course" min="1" max="5" required>
+
+            <button type="submit">Добавить студента</button>
+        </form>
+    </div>
+
+    <!-- Таблица студентов -->
+    <table class="student-table">
+        <thead>
+            <tr>
+                <th>Фамилия</th>
+                <th>Имя</th>
+                <th>Отчество</th>
+                <th>Пол</th>
+                <th>Возраст</th>
+                <th>Курс</th>
+            </tr>
+        </thead>
+        <tbody id="student-table-body">
+            <!-- Студенты будут добавляться динамически -->
+        </tbody>
+    </table>
+
+    <!-- Кнопка для вычисления результата -->
+    <button id="calculate-button">Вычислить курс с наибольшим процентом мужчин</button>
+
+    <!-- Блок для вывода результата -->
+    <div id="result" class="result"></div>
+</div>
+
+<script>
+    // ---------------------------
+    // Обработка переключения вариантов
+    // ---------------------------
+    let currentVariant = 'functional'; // По умолчанию используем функциональное наследование
+
+    document.getElementById('use-functional').addEventListener('click', function() {
+        currentVariant = 'functional';
+        students = [];
+        displayStudents();
+        document.getElementById('result').textContent = '';
+        alert('Используется вариант 1: Функциональное наследование');
+    });
+
+    document.getElementById('use-class').addEventListener('click', function() {
+        currentVariant = 'class';
+        students = [];
+        displayStudents();
+        document.getElementById('result').textContent = '';
+        alert('Используется вариант 2: Class / Extends');
+    });
+
+    // Массив студентов
+    let students = [];
+
+    // Привязка событий
+    document.getElementById('student-form').addEventListener('submit', addStudent);
+    document.getElementById('calculate-button').addEventListener('click', calculateHighestMalePercentage);
+
+    // Метод добавления студента через форму
+    function addStudent(event) {
+        event.preventDefault();
+
+        let lastName = document.getElementById('lastName').value;
+        let firstName = document.getElementById('firstName').value;
+        let patronymic = document.getElementById('patronymic').value;
+        let gender = document.getElementById('gender').value;
+        let age = parseInt(document.getElementById('age').value);
+        let course = parseInt(document.getElementById('course').value);
+
+        // Валидация
+        if (age < 16 || age > 35) {
+            alert('Возраст должен быть от 16 до 35 лет.');
+            return;
+        }
+
+        if (course < 1 || course > 5) {
+            alert('Курс должен быть от 1 до 5.');
+            return;
+        }
+
+        let student;
+
+        if (currentVariant === 'functional') {
+            // Вариант 1: Функциональное наследование
+            student = new UniversityStudent(lastName, firstName, patronymic, gender, age, course);
+        } else {
+            // Вариант 2: Class / Extends
+            student = new UniversityStudentClass(lastName, firstName, patronymic, gender, age, course);
+        }
+
+        students.push(student);
+
+        displayStudents();
+        document.getElementById('student-form').reset();
+    }
+
+    // Метод вывода всех студентов на страницу
+    function displayStudents() {
+        let tbody = document.getElementById('student-table-body');
+        tbody.innerHTML = '';
+
+        students.forEach(function(student) {
+            let row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td>${student.getLastName()}</td>
+                <td>${student.getFirstName()}</td>
+                <td>${student.getPatronymic()}</td>
+                <td>${student.getGender()}</td>
+                <td>${student.getAge()}</td>
+                <td>${student.getCourse()}</td>
+            `;
+
+            tbody.appendChild(row);
+        });
+    }
+
+    // Метод вывода результата на страницу
+    function calculateHighestMalePercentage() {
+        let courseCounts = {};
+        let maleCounts = {};
+
+        students.forEach(function(student) {
+            let course = student.getCourse();
+            if (!courseCounts[course]) {
+                courseCounts[course] = 0;
+                maleCounts[course] = 0;
+            }
+            courseCounts[course]++;
+            if (student.getGender() === 'Мужской') {
+                maleCounts[course]++;
+            }
+        });
+
+        let highestPercentage = 0;
+        let courseWithHighestPercentage = null;
+
+        for (let course in courseCounts) {
+            let percentage = (maleCounts[course] / courseCounts[course]) * 100;
+            if (percentage > highestPercentage) {
+                highestPercentage = percentage;
+                courseWithHighestPercentage = course;
+            }
+        }
+
+        let resultDiv = document.getElementById('result');
+        if (courseWithHighestPercentage !== null) {
+            resultDiv.textContent = 'Курс с наибольшим процентом мужчин: ' + courseWithHighestPercentage + ' курс (' + highestPercentage.toFixed(2) + '%)';
+        } else {
+            resultDiv.textContent = 'Нет данных для вычисления.';
+        }
+    }
+
+    // ---------------------------
+    // Вариант 1: Функциональное прототипное наследование
+    // ---------------------------
+
+    // Базовый класс Student
+    function Student(lastName, firstName, patronymic, gender, age) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.patronymic = patronymic;
+        this.gender = gender;
+        this.age = age;
+    }
+
+    Student.prototype.getLastName = function() {
+        return this.lastName;
+    };
+
+    Student.prototype.setLastName = function(lastName) {
+        this.lastName = lastName;
+    };
+
+    Student.prototype.getFirstName = function() {
+        return this.firstName;
+    };
+
+    Student.prototype.setFirstName = function(firstName) {
+        this.firstName = firstName;
+    };
+
+    Student.prototype.getPatronymic = function() {
+        return this.patronymic;
+    };
+
+    Student.prototype.setPatronymic = function(patronymic) {
+        this.patronymic = patronymic;
+    };
+
+    Student.prototype.getGender = function() {
+        return this.gender;
+    };
+
+    Student.prototype.setGender = function(gender) {
+        this.gender = gender;
+    };
+
+    Student.prototype.getAge = function() {
+        return this.age;
+    };
+
+    Student.prototype.setAge = function(age) {
+        this.age = age;
+    };
+
+    // Класс-наследник UniversityStudent
+    function UniversityStudent(lastName, firstName, patronymic, gender, age, course) {
+        Student.call(this, lastName, firstName, patronymic, gender, age);
+        this.course = course;
+    }
+
+    UniversityStudent.prototype = Object.create(Student.prototype);
+    UniversityStudent.prototype.constructor = UniversityStudent;
+
+    UniversityStudent.prototype.getCourse = function() {
+        return this.course;
+    };
+
+    UniversityStudent.prototype.setCourse = function(course) {
+        this.course = course;
+    };
+
+    // ---------------------------
+    // Вариант 2: Использование class / extends
+    // ---------------------------
+
+    // Базовый класс StudentClass
+    class StudentClass {
+        constructor(lastName, firstName, patronymic, gender, age) {
+            this.lastName = lastName;
+            this.firstName = firstName;
+            this.patronymic = patronymic;
+            this.gender = gender;
+            this.age = age;
+        }
+
+        getLastName() {
+            return this.lastName;
+        }
+
+        setLastName(lastName) {
+            this.lastName = lastName;
+        }
+
+        getFirstName() {
+            return this.firstName;
+        }
+
+        setFirstName(firstName) {
+            this.firstName = firstName;
+        }
+
+        getPatronymic() {
+            return this.patronymic;
+        }
+
+        setPatronymic(patronymic) {
+            this.patronymic = patronymic;
+        }
+
+        getGender() {
+            return this.gender;
+        }
+
+        setGender(gender) {
+            this.gender = gender;
+        }
+
+        getAge() {
+            return this.age;
+        }
+
+        setAge(age) {
+            this.age = age;
+        }
+    }
+
+    // Класс-наследник UniversityStudentClass
+    class UniversityStudentClass extends StudentClass {
+        constructor(lastName, firstName, patronymic, gender, age, course) {
+            super(lastName, firstName, patronymic, gender, age);
+            this.course = course;
+        }
+
+        getCourse() {
+            return this.course;
+        }
+
+        setCourse(course) {
+            this.course = course;
+        }
+    }
+
+</script>
+
+{% endblock %}
+    

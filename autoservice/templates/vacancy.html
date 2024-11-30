@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block title %}
+    Vacancies
+{% endblock %}
+{% block content %}
+<style>
+    
+
+    body {
+        height: 100%;
+        
+    }
+
+    .vacancy-back{
+        margin-top: 20px;
+        margin-right: 200px;
+        margin-left: 200px;
+        padding: 20px;
+        background-image:url("../static/background/table.jpg");
+        background-size: cover;
+        height: 80vh;
+        display: flex; 
+        flex-direction: column; 
+        align-items: center;
+        border: 20px solid transparent;
+        border-radius: 15px; 
+         box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), inset 0 0 10px rgba(0, 0, 0, 0.5);
+        background-clip: padding-box; 
+        position: relative;
+    }
+
+    .vacancy-back::before {
+        content: "";
+        position: absolute;
+        top: -20px;
+        left: -20px;
+        right: -20px;
+        bottom: -20px;
+        background-image: url("../static/textures/wood_texture.jpg"); 
+        background-size: cover;
+        opacity: 0.7; 
+        z-index: -1; 
+        filter: brightness(0.6);
+    }
+    .vacancy-title {
+        text-align: center;
+    }
+
+    .vacancy_table{
+        text-align:center;
+        margin-top: 20px; 
+        width: 80%;
+        border-collapse: collapse;  
+        
+    }
+    .vacancy_table td, th {
+        vertical-align: middle;
+        font-size: 1.2em;
+        
+    }
+    .vacancy_table td:empty {
+        background-color: #f0f0f0; 
+    }
+
+    .vacancy_table td:first-child {
+        font-weight: normal;
+    }
+    
+    
+    .Vtable{
+        width: 100%;
+        display: flex;
+        justify-content:center;
+    }
+</style>
+<div class = "vacancy-back">
+
+    <div class="vacancy-title">
+<h1 class="dust-font">Vacancies</h1>
+<p  class="dust-font">Check out our current job openings and career opportunities.</p>
+<h1 class="dust-font">----------------------------------</h1>
+</div>
+
+<div class="Vtable">
+<table  class ="vacancy_table">
+    <thead>
+        <tr>
+            <th  class="dust-font" id="title-header">Position Title</th>
+            <th  class="dust-font" id="description-header">Description</th>
+            <th  class="dust-font" id="salary-header">Salary</th>
+            <th  class="dust-font" id="status-header">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for vacancy in vacancies %}
+        <tr>
+            <td class="dust-font" headers="title-header">{{ vacancy.title }}</td>
+            <td class="dust-font" headers="description-header">{{ vacancy.description }}</td>
+            <td class="dust-font" headers="salary-header">{{ vacancy.salary }}$</td>
+            <td class="dust-font" headers="status-header"> 
+                {% if vacancy.active %}
+                    <span style="color: white;">&#10004;</span> 
+                {% else %}
+                    <span style="color: white;">&#10008;</span> 
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+</div>
+{% endblock %}

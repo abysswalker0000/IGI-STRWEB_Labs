@@ -1,0 +1,253 @@
+{% extends 'base.html' %}
+{% block title %}Reviews{% endblock %}
+{% block content %}
+
+<style>
+    /* Стили для основного контента */
+    .review-content-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 80vh;
+        width: 100%;
+        margin: auto;
+        font-family: 'Inkulinati-Regular', sans-serif;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .review-striped-border {
+        border: 1px solid black;
+        text-align: center;
+        width: 70%;
+        background: repeating-linear-gradient(
+            -35deg,
+            rgba(20, 20, 20, 0.9),
+            rgba(20, 20, 20, 0.9) 10px,
+            rgba(51, 51, 51, 0.9) 10px,
+            rgba(51, 51, 51, 0.9) 20px
+        );
+        -webkit-text-stroke: 0.5px black;
+    }
+
+    .review-list-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        width: 70%;
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(5, 5, 5, 0.9),
+            rgba(5, 5, 5, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 15px
+        );
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        width: 100%;
+    }
+
+    li {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        margin-bottom: 0;
+    }
+
+    li:nth-child(even) {
+        background: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0.2),
+            rgba(245, 245, 245, 0.5)
+        );
+    }
+
+    li:nth-child(odd) {
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(5, 5, 5, 0.9),
+            rgba(5, 5, 5, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 15px
+        );
+    }
+
+    .review-text {
+        flex: 2;
+        padding-right: 20px;
+        color: #fff;
+    }
+
+    .review-info {
+        flex: 1;
+        text-align: right;
+        color: #ccc;
+    }
+
+    .review-button {
+        color: #cf9000;
+        background-color: #404040;
+        border: 1px solid black;
+        height: 40px;
+        width: 150px;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: crosshair;
+    }
+
+    .review-button:hover {
+        border-color: #a37303;
+    }
+
+    .review-button:hover span {
+        animation: blink 0.9s infinite;
+    }
+
+    @keyframes blink {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0;
+        }
+    }
+
+    /* Стили для анимационного блока */
+    .tools-animation-wrapper {
+        position: relative;
+        height: 400px; /* Высота блока */
+        overflow: hidden;
+        background-color: #ffffff; /* Изменён задний фон на белый */
+    }
+
+    .tools-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .tool-icon {
+        position: absolute;
+        width: 80px; /* Размер колеса */
+        height: 80px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        opacity: 0.7;
+        transition: transform 0.3s ease; /* Плавное движение */
+        /* Удалены постоянные анимации */
+    }
+</style>
+
+<div class="review-content-wrapper">
+    <!-- Существующий блок с отзывами -->
+    <div class="review-striped-border">
+        <h1>Customer Reviews</h1>
+    </div>
+    <div class="review-list-body">
+        <ul>
+            {% for review in reviews %}
+            <li>
+                <div class="review-text">{{ review.text }}</div>
+                <div class="review-info">{{ review.rating }}/10 by {{ review.user.username }} on {{ review.created_at }}</div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="review-striped-border" style="padding-top: 10px; padding-bottom: 10px">
+        <button class="review-button" onclick="window.location.href='{% url 'create_review' %}';">
+            <span>Create a Review</span>
+        </button>
+    </div>
+</div>
+
+<div class="tools-animation-wrapper">
+    <div class="tools-background"></div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const toolsWrapper = document.querySelector('.tools-background');
+
+        // Параметры
+        const numOfTools = 20; // Количество колёс
+        const blockHeight = toolsWrapper.offsetHeight;
+        const blockWidth = toolsWrapper.offsetWidth;
+        const moveAmount = 10; // Количество пикселей для движения при каждом событии скролла
+        const maxMove = 100; // Максимальное смещение в пикселях
+
+        // Функция для выбора случайного изображения колеса
+        function getRandomWheelImage() {
+            const wheelImages = ["wheel1.png", "wheel2.png"];
+            const randomIndex = Math.floor(Math.random() * wheelImages.length);
+            return `url("../static/background/${wheelImages[randomIndex]}")`;
+        }
+
+        // Создаём и размещаем колёса
+        for (let i = 0; i < numOfTools; i++) {
+            const toolIcon = document.createElement('div');
+            toolIcon.className = 'tool-icon';
+
+            // Генерация случайных позиций
+            const randomTop = Math.random() * (blockHeight - 80); // Учитываем высоту колеса
+            const randomLeft = Math.random() * (blockWidth - 80); // Учитываем ширину колеса
+
+            // Устанавливаем позиции
+            toolIcon.style.top = `${randomTop}px`;
+            toolIcon.style.left = `${randomLeft}px`;
+
+            // Устанавливаем случайное изображение колеса
+            toolIcon.style.backgroundImage = getRandomWheelImage();
+
+            // Инициализируем текущий сдвиг по X
+            toolIcon.dataset.currentX = 0;
+
+            toolsWrapper.appendChild(toolIcon);
+        }
+
+        // Отслеживаем направление скролла
+        let lastScrollTop = window.scrollY;
+
+        window.addEventListener('scroll', () => {
+            const currentScrollTop = window.scrollY;
+            const direction = currentScrollTop > lastScrollTop ? 'down' : 'up'; // Определяем направление
+            lastScrollTop = currentScrollTop;
+
+            // Движение элементов
+            document.querySelectorAll('.tool-icon').forEach((tool) => {
+                let currentX = parseInt(tool.dataset.currentX, 10);
+
+                // Вычисляем новое смещение
+                if (direction === 'down') {
+                    currentX += moveAmount;
+                } else {
+                    currentX -= moveAmount;
+                }
+
+                // Ограничиваем движение, чтобы колёса не ушли за пределы блока
+                if (currentX > maxMove) {
+                    currentX = maxMove;
+                }
+                if (currentX < -maxMove) {
+                    currentX = -maxMove;
+                }
+
+                // Обновляем данные
+                tool.dataset.currentX = currentX;
+
+                // Применяем трансформацию
+                tool.style.transform = `translateX(${currentX}px)`;
+            });
+        });
+    });
+</script>
+
+{% endblock %}

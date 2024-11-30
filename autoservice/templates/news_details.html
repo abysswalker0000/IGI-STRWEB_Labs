@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} {{ news.title }} {% endblock %}
+{% block content %}
+<style>
+    
+    .news-detail {
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(5, 5, 5, 0.9), 
+            rgba(5, 5, 5, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 8px, 
+            rgba(18, 18, 18, 0.9) 15px
+        );
+        color: white; 
+        margin: 20px auto; 
+        max-width: 1200px; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .news-title {
+        font-family: 'Inkulinati-Regular', sans-serif;
+        font-size:20px;
+        text-align: center;
+        width:100%;
+        background: repeating-linear-gradient(
+            -35deg,
+            rgba(20, 20, 20, 0.9), 
+            rgba(20, 20, 20, 0.9) 10px,
+            rgba(51, 51, 51, 0.9) 10px, 
+            rgba(51, 51, 51, 0.9) 20px
+        );
+        -webkit-text-stroke: 0.5px black;
+       
+    }
+
+    .photo-frame {
+        position: relative;
+        display: inline-block;
+        margin: 0 auto;
+        background-color: black;
+        
+    }
+
+    .news-photo {
+        display: block;
+        max-width: 100%; 
+        height: auto;
+        border: none; 
+        background-color: black;
+        
+    }
+
+    .frame-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none; 
+    }
+
+    .news-description {
+         {% comment %} column-count: 2;
+        column-gap: 30px;   {% endcomment %}
+        width: 100%;
+        background: repeating-linear-gradient(
+            -35deg,
+            rgba(20, 20, 20, 0.9), 
+            rgba(20, 20, 20, 0.9) 10px,
+            rgba(51, 51, 51, 0.9) 10px, 
+            rgba(51, 51, 51, 0.9) 20px
+        );
+    }
+    .news-description p{
+        font-size: 18px;
+        line-height: 1.6;
+        text-align: justify;
+        width: 97%;
+        margin-left:15px;
+        -webkit-text-stroke: 0.5px black;
+
+    }
+</style>
+
+<div class="news-detail">
+    <!-- Блок для заголовка -->
+    <div class="news-title">
+        <h1>{{ news.title }}</h1>
+    </div>
+
+    <!-- Блок для фото с рамкой -->
+    <div class="photo-frame">
+        <img src="{{ news.image.url }}" alt="{{ news.title }}" class="news-photo">
+        <img src="{% static 'background/rb_7373.png' %}" alt="Frame" class="frame-overlay">
+    </div>
+
+    <div class="news-description">
+        <p>{{ news.description }}</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Contact Us
+{% endblock %}
+
+{% block content %}
+<style>
+    .main-info-contacts{
+        margin-left: 110px;
+    }
+    .main-contacts{
+      display:flex; 
+      justify-content: space-between;  
+      
+    }
+    #main-info{
+
+        padding-left:20px;
+    }
+    .img-contacts{
+        width: 70vh;
+        margin-right: 60px; 
+        margin-top: 30px; 
+        height: 97vh;
+    }
+    #contact-email {
+        transform: rotate(3deg);  
+        font-size: 1.2rem;
+        padding-left:30px;
+        margin-top: 39px;
+        font-size:  26px;
+    }
+    #contact-phone {
+        transform: rotate(-2deg); 
+        font-size: 1.2rem;
+        font-size: 26px;
+        margin-top: 3px;
+    }
+    #contact-title{
+        font-size: 1.3rem;
+        margin-top: 20px; 
+        margin-bottom: 0;
+        font-size: 26px;
+    }
+    .contact-image{
+        width:100%;
+        height:100%;
+    }
+    .bio{
+            width: 100vh; 
+            height: 60vh; 
+            border-radius:20px;
+            padding: 10px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+            font-size: 28px;
+            margin-top: 40px;
+           
+    }
+    
+    #contact-description{
+        text-indent: 1px;
+    }
+    .buttons{
+        height:10vh;
+        text-align: center;
+        margin-top:17px;
+        
+    }
+    .main-contacts{
+        background-image:url("../static/background/back4.png"); 
+        background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    overflow-x:none;
+    overflow-y:none;
+    }
+    
+</style>
+<div class="main-contacts">
+    <div class="main-info-contacts">
+        <div id="main-info">
+            <p id="contact-title">
+                <span class="nfs-font" style="color: #d4ae57; ">Name:</span> 
+                <span style="font-family: 'Inkulinati-Regular', sans-serif; ">{{ contacts.0.title }}</span>
+            </p>
+            <p id="contact-phone">
+                <span class="nfs-font" style="color: #d4ae57; ">Phone:</span> 
+                <span style="font-family: 'Inkulinati-Regular', sans-serif; ">{{ contacts.0.phone_number }}</span>
+            </p>
+            <p id="contact-email">
+                <span class="nfs-font" style="color: #d4ae57; ">Email:</span> 
+                <span style="font-family: 'Inkulinati-Regular', sans-serif; ">{{ contacts.0.email }}</span>
+            </p>
+        </div>
+         <div class="bio" id="bio"> 
+             <p class="gotic-font" style ="color:#d4ae57; font-size:1.8em; margin: 0; padding: 0;">bio:</p>
+             <p id="contact-description" style ="margin: 0; padding: 0;"> {{ contacts.0.description }}</p>
+         </div>
+ 
+         <div class="buttons">
+             <button style ="font-size: 1.2rem; margin-right:50px; width:150px;"class="nav-button" id="prev-btn">Back</button>
+             <button style ="font-size: 1.2rem; width:210px;"class="nav-button" id="next-btn">Forward</button>
+         </div>
+    </div>
+    <div class="div-photo-contacts">
+       <div class="img-contacts" >
+             <img class = "contact-image" id="contact-image" src="{{ contacts.0.image.url }}" alt="Image of {{ contacts.0.title }}">
+       </div>
+    </div>   
+ </div>
+<script>
+    const contacts = [
+        {% for contact in contacts %}
+        {
+            title: "{{ contact.title }}",
+            image: "{{ contact.image.url }}",
+            description: "{{ contact.description }}",
+            email: "{{ contact.email }}",
+            phone_number: "{{ contact.phone_number }}"
+        },
+        {% endfor %}
+    ];
+
+    let currentIndex = 0;
+
+    const titleElement = document.getElementById('contact-title');
+    const imageElement = document.getElementById('contact-image');
+    const captionElement = document.getElementById('contact-caption');
+    const descriptionElement = document.getElementById('contact-description');
+    const emailElement = document.getElementById('contact-email');
+    const phoneElement = document.getElementById('contact-phone');
+    const cardElement = document.getElementById('bio');
+
+    document.getElementById('next-btn').addEventListener('click', () => {
+        changeContact(1);
+    });
+
+    document.getElementById('prev-btn').addEventListener('click', () => {
+        changeContact(-1);
+    });
+
+    function changeContact(direction) {
+        cardElement.classList.remove('visible');
+        cardElement.classList.add('hidden');
+    
+        setTimeout(() => {
+            currentIndex = (currentIndex + direction + contacts.length) % contacts.length;
+            const contact = contacts[currentIndex];
+            titleElement.querySelector('span:nth-child(2)').textContent = contact.title;
+            imageElement.src = contact.image;
+            descriptionElement.textContent = contact.description;
+            emailElement.querySelector('span:nth-child(2)').textContent = contact.email;
+            phoneElement.querySelector('span:nth-child(2)').textContent = contact.phone_number;
+    
+            cardElement.classList.remove('hidden');
+            cardElement.classList.add('visible');
+        }, 500);
+    }    
+</script>
+{% endblock %}

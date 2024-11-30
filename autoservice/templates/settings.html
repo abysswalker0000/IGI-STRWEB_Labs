@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Контакты</title>
+    <style>
+        /* Ваши стили здесь */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        /* Стили для таблицы */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            cursor: pointer;
+            position: relative;
+            padding: 10px;
+        }
+
+        th .sort-indicator {
+            margin-left: 5px;
+        }
+
+        td, th {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+
+        img {
+            max-width: 50px;
+            max-height: 50px;
+        }
+
+        /* Пагинация */
+        .pagination {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .pagination button {
+            margin: 0 2px;
+            padding: 5px 10px;
+        }
+
+        /* Форма фильтрации и добавления */
+        .filter-form, .add-form, .reward-section {
+            margin-top: 20px;
+        }
+
+        .add-form {
+            display: none;
+            border: 1px solid #ddd;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+
+        .add-form div {
+            margin-bottom: 10px;
+        }
+
+        .add-form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .add-form input, .add-form textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        .error {
+            border-color: red;
+            background-color: #ffe6e6;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+        }
+
+        /* Блок деталей */
+        .details {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #fafafa;
+        }
+
+        .details img {
+            max-width: 100px;
+            max-height: 100px;
+        }
+
+        /* Кнопки */
+        button {
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+
+        /* Стили для чекбоксов */
+        input[type="checkbox"] {
+            transform: scale(1.2);
+            margin-right: 5px;
+        }
+
+        /* Сообщение о премировании */
+        #reward-message {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Прелоадер */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            display: none;
+        }
+
+        .preloader {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+
+        .circle {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 5px solid rgba(255, 99, 71, 0.6); 
+            animation: color-change-border-horizontal 4s linear infinite;
+        }
+
+        .circle-horizontal {
+            animation: rotate-horizontal 2s linear infinite, color-change-border-horizontal 4s linear infinite;
+        }
+
+        .circle-vertical {
+            animation: rotate-vertical 2s linear infinite, color-change-border-vertical 4s linear infinite;
+        }
+
+        .circle-diagonal {
+            transform: rotateZ(45deg);
+            animation: rotate-diagonal 2s linear infinite, color-change-border-diagonal 4s linear infinite;
+        }
+
+        .circle-2diagonal {
+            transform: rotateZ(135deg);
+            animation: rotate-2diagonal 2s linear infinite, color-change-border-2diagonal 4s linear infinite;
+        }
+
+        @keyframes color-change-border-horizontal {
+            0%, 100% {
+                border-color: rgba(255, 99, 71, 0.6); 
+            }
+            25% {
+                border-color: rgba(255, 215, 0, 0.6); 
+            }
+            50% {
+                border-color: rgba(173, 255, 47, 0.6); 
+            }
+            75% {
+                border-color: rgba(255, 69, 0, 0.6); 
+            }
+        }
+
+        @keyframes color-change-border-vertical {
+            0%, 100% {
+                border-color: rgba(30, 144, 255, 0.6); 
+            }
+            25% {
+                border-color: rgba(0, 250, 154, 0.6); 
+            }
+            50% {
+                border-color: rgba(255, 20, 147, 0.6); 
+            }
+            75% {
+                border-color: rgba(138, 43, 226, 0.6); 
+            }
+        }
+
+        @keyframes color-change-border-diagonal {
+            0%, 100% {
+                border-color: rgba(0, 255, 127, 0.6); 
+            }
+            25% {
+                border-color: rgba(255, 215, 0, 0.6); 
+            }
+            50% {
+                border-color: rgba(255, 105, 180, 0.6); 
+            }
+            75% {
+                border-color: rgba(30, 144, 255, 0.6); 
+            }
+        }
+
+        @keyframes color-change-border-2diagonal {
+            0%, 100% {
+                border-color: rgba(255, 165, 0, 0.6); 
+            }
+            25% {
+                border-color: rgba(0, 255, 255, 0.6); 
+            }
+            50% {
+                border-color: rgba(173, 255, 47, 0.6); 
+            }
+            75% {
+                border-color: rgba(255, 20, 147, 0.6); 
+            }
+        }
+
+        @keyframes rotate-horizontal {
+            0% {
+                transform: rotateY(0deg);
+            }
+            100% {
+                transform: rotateY(360deg);
+            }
+        }
+
+        @keyframes rotate-vertical {
+            0% {
+                transform: rotateX(0deg);
+            }
+            100% {
+                transform: rotateX(360deg);
+            }
+        }
+
+        @keyframes rotate-diagonal {
+            0% {
+                transform: rotateZ(45deg) rotateY(0deg);
+            }
+            100% {
+                transform: rotateZ(45deg) rotateY(360deg);
+            }
+        }
+
+        @keyframes rotate-2diagonal {
+            0% {
+                transform: rotateZ(135deg) rotateY(0deg);
+            }
+            100% {
+                transform: rotateZ(135deg) rotateY(360deg);
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+   <div class="container">
+       <h1>Контакты</h1>
+   
+       <!-- Прелоадер -->
+       <div id="preloader">
+           <div class="preloader">
+               <div class="circle circle-horizontal"></div>
+               <div class="circle circle-vertical"></div>
+               <div class="circle circle-diagonal"></div>
+               <div class="circle circle-2diagonal"></div>
+           </div>
+       </div>
+   
+       <!-- Форма фильтрации -->
+       <div class="filter-form">
+           <input type="text" id="filter-input" placeholder="Введите текст для фильтрации">
+           <button id="filter-button">Найти</button>
+       </div>
+   
+       <!-- Кнопка добавления контакта -->
+       <button id="add-button">Добавить</button>
+   
+       <!-- Форма добавления контакта -->
+       <div class="add-form" id="add-form">
+           <h3>Добавить контакт</h3>
+           <form id="contact-form" method="post">
+               {% csrf_token %}
+               <div>
+                   <label for="title">ФИО:</label>
+                   <input type="text" id="title" name="title" required>
+                   <div class="error-message" id="title-error"></div>
+               </div>
+               <div>
+                   <label for="description">Описание:</label>
+                   <textarea id="description" name="description" required></textarea>
+               </div>
+               <div>
+                   <label for="phone_number">Телефон:</label>
+                   <input type="text" id="phone_number" name="phone_number" required>
+                   <div class="error-message" id="phone-error"></div>
+               </div>
+               <div>
+                   <label for="email">Почта:</label>
+                   <input type="email" id="email" name="email" required>
+               </div>
+               <!-- Поле URL -->
+               <div>
+                   <label for="url">URL:</label>
+                   <input type="text" id="url" name="url" required>
+                   <div class="error-message" id="url-error"></div>
+               </div>
+               <button type="submit" id="submit-button" disabled>Добавить в таблицу</button>
+           </form>
+       </div>
+   
+       <!-- Таблица контактов -->
+       <table id="contacts-table">
+           <thead>
+           <tr>
+               <th data-column="title">ФИО <span class="sort-indicator"></span></th>
+               <th data-column="image">Фото</th>
+               <th data-column="description">Описание</th>
+               <th data-column="phone_number">Телефон <span class="sort-indicator"></span></th>
+               <th data-column="email">Почта <span class="sort-indicator"></span></th>
+               <th>Выбрать</th>
+           </tr>
+           </thead>
+           <tbody>
+           {% for contact in contacts %}
+           <tr>
+               <td>{{ contact.title }}</td>
+               <td><img src="{{ contact.image.url }}" alt="{{ contact.title }}"></td>
+               <td>{{ contact.description }}</td>
+               <td>{{ contact.phone_number }}</td>
+               <td>{{ contact.email }}</td>
+               <td><input type="checkbox" data-index="{{ forloop.counter0 }}"></td>
+           </tr>
+           {% endfor %}
+           </tbody>
+       </table>
+   
+       <!-- Навигация по страницам -->
+       <div class="pagination" id="pagination"></div>
+   
+       <!-- Блок премирования -->
+       <div class="reward-section">
+           <button id="reward-button">Премировать</button>
+           <div id="reward-message"></div>
+       </div>
+   
+       <!-- Блок деталей -->
+       <div class="details" id="details"></div>
+   </div>
+   
+
+   <script>
+       const contacts = [
+           {% for contact in contacts %}
+           {
+               id: {{ contact.id }},
+               title: "{{ contact.title|escapejs }}",
+               image: "{{ contact.image.url|escapejs }}",
+               description: "{{ contact.description|escapejs }}",
+               phone_number: "{{ contact.phone_number|escapejs }}",
+               email: "{{ contact.email|escapejs }}"
+           }{% if not forloop.last %},{% endif %}
+           {% endfor %}
+       ];
+   </script>
+   
+   <script>
+       document.addEventListener('DOMContentLoaded', function () {
+           // Инициализация данных
+           let filteredContacts = contacts.slice();
+   
+           // Параметры пагинации и сортировки
+           const itemsPerPage = 3;
+           let currentPage = 1;
+           let currentSortColumn = null;
+           let currentSortOrder = 'asc';
+   
+           // Элементы страницы
+           const tableBody = document.querySelector('#contacts-table tbody');
+           const pagination = document.getElementById('pagination');
+           const filterInput = document.getElementById('filter-input');
+           const filterButton = document.getElementById('filter-button');
+           const addButton = document.getElementById('add-button');
+           const addForm = document.getElementById('add-form');
+           const contactForm = document.getElementById('contact-form');
+           const submitButton = document.getElementById('submit-button');
+           const phoneInput = document.getElementById('phone_number');
+           const phoneError = document.getElementById('phone-error');
+           const titleInput = document.getElementById('title');
+           const titleError = document.getElementById('title-error');
+           const urlInput = document.getElementById('url');
+           const urlError = document.getElementById('url-error');
+           const rewardButton = document.getElementById('reward-button');
+           const rewardMessage = document.getElementById('reward-message');
+           const detailsDiv = document.getElementById('details');
+           const preloader = document.getElementById('preloader');
+   
+           // Функция показа прелоадера
+           function showPreloader() {
+               preloader.style.display = 'flex';
+           }
+   
+           // Функция скрытия прелоадера
+           function hidePreloader() {
+               preloader.style.display = 'none';
+           }
+   
+           // Отображение таблицы
+           function displayTable() {
+               showPreloader();
+               setTimeout(() => {
+                   const paginatedData = paginateData(filteredContacts);
+   
+                   tableBody.innerHTML = '';
+                   paginatedData.forEach((contact) => {
+                       const row = document.createElement('tr');
+                       row.innerHTML = `
+                           <td>${contact.title}</td>
+                           <td><img src="${contact.image}" alt="${contact.title}"></td>
+                           <td>${contact.description}</td>
+                           <td>${contact.phone_number}</td>
+                           <td>${contact.email}</td>
+                           <td><input type="checkbox" data-index="${contacts.indexOf(contact)}"></td>
+                       `;
+                       row.addEventListener('click', function (e) {
+                           if (e.target.type !== 'checkbox') {
+                               showDetails(contact);
+                           }
+                       });
+                       tableBody.appendChild(row);
+                   });
+   
+                   setupPagination(filteredContacts.length);
+                   hidePreloader();
+               }, 500); // Имитируем задержку для прелоадера
+           }
+   
+           // Фильтрация данных
+           function filterData() {
+               showPreloader();
+               setTimeout(() => {
+                   const query = filterInput.value.toLowerCase();
+                   filteredContacts = contacts.filter(contact => {
+                       return (
+                           contact.title.toLowerCase().includes(query) ||
+                           contact.description.toLowerCase().includes(query) ||
+                           contact.phone_number.toLowerCase().includes(query) ||
+                           contact.email.toLowerCase().includes(query)
+                       );
+                   });
+                   currentPage = 1;
+                   displayTable();
+                   hidePreloader();
+               }, 500);
+           }
+   
+           // Сортировка данных
+           function sortData() {
+               showPreloader();
+               setTimeout(() => {
+                   if (!currentSortColumn) return;
+   
+                   filteredContacts.sort((a, b) => {
+                       let valueA = a[currentSortColumn].toLowerCase();
+                       let valueB = b[currentSortColumn].toLowerCase();
+   
+                       if (valueA < valueB) return currentSortOrder === 'asc' ? -1 : 1;
+                       if (valueA > valueB) return currentSortOrder === 'asc' ? 1 : -1;
+                       return 0;
+                   });
+                   displayTable();
+                   hidePreloader();
+               }, 500);
+           }
+   
+           // Пагинация данных
+           function paginateData(data) {
+               const start = (currentPage - 1) * itemsPerPage;
+               return data.slice(start, start + itemsPerPage);
+           }
+   
+           // Настройка пагинации
+           function setupPagination(totalItems) {
+               pagination.innerHTML = '';
+               const totalPages = Math.ceil(totalItems / itemsPerPage);
+   
+               for (let i = 1; i <= totalPages; i++) {
+                   const btn = document.createElement('button');
+                   btn.textContent = i;
+                   if (i === currentPage) btn.disabled = true;
+                   btn.addEventListener('click', () => {
+                       currentPage = i;
+                       displayTable();
+                   });
+                   pagination.appendChild(btn);
+               }
+           }
+   
+           // Отображение деталей контакта
+           function showDetails(contact) {
+               detailsDiv.innerHTML = `
+                   <h3>${contact.title}</h3>
+                   <img src="${contact.image}" alt="${contact.title}">
+                   <p><strong>Описание:</strong> ${contact.description}</p>
+                   <p><strong>Телефон:</strong> ${contact.phone_number}</p>
+                   <p><strong>Почта:</strong> ${contact.email}</p>
+               `;
+           }
+   
+           // События для фильтрации
+           filterButton.addEventListener('click', filterData);
+   
+           // Сортировка при клике на заголовок столбца
+           document.querySelectorAll('#contacts-table th[data-column]').forEach(th => {
+               th.addEventListener('click', function () {
+                   const column = this.getAttribute('data-column');
+                   if (currentSortColumn === column) {
+                       currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+                   } else {
+                       currentSortColumn = column;
+                       currentSortOrder = 'asc';
+                   }
+                   updateSortIndicators();
+                   sortData();
+               });
+           });
+   
+           // Обновление индикаторов сортировки
+           function updateSortIndicators() {
+               document.querySelectorAll('.sort-indicator').forEach(indicator => {
+                   indicator.textContent = '';
+               });
+               if (currentSortColumn) {
+                   const th = document.querySelector(`th[data-column="${currentSortColumn}"] .sort-indicator`);
+                   th.textContent = currentSortOrder === 'asc' ? '▲' : '▼';
+               }
+           }
+   
+           // Показать/скрыть форму добавления
+           addButton.addEventListener('click', () => {
+               addForm.style.display = addForm.style.display === 'none' ? 'block' : 'none';
+           });
+   
+           // Валидация номера телефона
+           function validatePhone(phone) {
+               const regex = /^(\+375|8)\s?\(?\d{2}\)?\s?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/;
+               return regex.test(phone);
+           }
+   
+           // Валидация URL
+           function validateURL(url) {
+               const regex = /^(https?:\/\/).+\.(php|html)$/;
+               return regex.test(url);
+           }
+   
+           // Валидация ФИО (непустое поле)
+           function validateTitle(title) {
+               return title.trim() !== '';
+           }
+   
+           // Валидация формы
+           contactForm.addEventListener('input', () => {
+               let isFormValid = contactForm.checkValidity();
+   
+               // Валидация телефона
+               if (!validatePhone(phoneInput.value)) {
+                   phoneInput.classList.add('error');
+                   phoneError.textContent = 'Неверный формат номера телефона.';
+                   isFormValid = false;
+               } else {
+                   phoneInput.classList.remove('error');
+                   phoneError.textContent = '';
+               }
+   
+               // Валидация URL
+               if (!validateURL(urlInput.value)) {
+                   urlInput.classList.add('error');
+                   urlError.textContent = 'Неверный формат URL.';
+                   isFormValid = false;
+               } else {
+                   urlInput.classList.remove('error');
+                   urlError.textContent = '';
+               }
+   
+               // Валидация ФИО
+               if (!validateTitle(titleInput.value)) {
+                   titleInput.classList.add('error');
+                   titleError.textContent = 'Поле ФИО не может быть пустым.';
+                   isFormValid = false;
+               } else {
+                   titleInput.classList.remove('error');
+                   titleError.textContent = '';
+               }
+   
+               submitButton.disabled = !isFormValid;
+           });
+   
+           // Премирование выбранных сотрудников
+           rewardButton.addEventListener('click', () => {
+               const checkboxes = document.querySelectorAll('#contacts-table tbody input[type="checkbox"]:checked');
+               const selectedNames = [];
+               checkboxes.forEach(checkbox => {
+                   const index = checkbox.getAttribute('data-index');
+                   selectedNames.push(contacts[index].title);
+               });
+               if (selectedNames.length > 0) {
+                   rewardMessage.textContent = `Премированы сотрудники: ${selectedNames.join(', ')}.`;
+               } else {
+                   rewardMessage.textContent = 'Не выбраны сотрудники для премирования.';
+               }
+           });
+   
+           // Инициализация
+           displayTable();
+       });
+   </script>
+   
+   </body>
+</html>

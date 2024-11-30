@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Privacy Policy
+{% endblock %}
+{% block content %}
+<style>
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 0;
+    margin: 0;    
+    font-family: 'Inkulinati-Regular', sans-serif;
+    background-color: rgba(0, 0, 0, 0.5);   
+}
+
+.privacy-content {
+    width: 100%; 
+    max-width: 900px; 
+    max-height: 70vh;
+    overflow-y: scroll; 
+    background: repeating-linear-gradient(
+        -40deg,
+        rgba(11, 11, 11, 0.5),
+        rgba(11, 11, 11, 0.5) 10px,
+        rgba(0, 0, 0, 0.5) 10px,
+        rgba(0, 0, 0, 0.5) 20px
+    ); 
+    background-color: black;
+    color: white;
+    padding: 20px;
+    border: none;
+    position: relative;
+    backdrop-filter: blur(10px);
+}
+
+.privacy-content p::first-letter {
+    float: left; 
+}
+.privacy-content p {
+    word-spacing: 0.1em;
+}
+
+.privacy-content ul {
+    list-style-type: none; 
+    padding-left: 0; 
+}
+
+.privacy-content li::before {
+    content: "\25CF ";
+}
+
+.privacy-content ::selection {
+    background-color: orange; 
+}
+
+.striped-border {
+    display: flex;
+    width: 940px; 
+    background: repeating-linear-gradient(
+        -35deg,
+        rgba(20, 20, 20, 0.9), 
+        rgba(20, 20, 20, 0.9) 10px,
+        rgba(51, 51, 51, 0.9) 10px, 
+        rgba(51, 51, 51, 0.9) 20px
+    );
+    font-family: 'Inkulinati-Regular', sans-serif;
+    font-size: 30px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    -webkit-text-stroke: 0.5px black;
+}
+
+.divider {
+    height: 5px; 
+    background-color: #454545; 
+    margin: 0; 
+    width: 940px; 
+}
+
+.quote::before {
+    content: "«"; 
+}
+
+.quote::after {
+    content: "»"; 
+}
+
+
+h1, h2 {
+    text-transform: capitalize;
+    text-align: center;
+}
+
+.privacy-content p {
+    line-height: 1.2;           /*селектор потомков*/
+    letter-spacing: 0.05em; 
+    word-spacing: 0.1em; 
+    hyphens: auto;
+    word-break: break-word;
+}
+
+.car {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100px; 
+    height: 100px; 
+    background-image: url({% static 'animation/cartop.png' %}); 
+    background-size: contain;
+    background-repeat: no-repeat;
+    animation: driveAndDrift 3s linear forwards; 
+}
+
+
+.text {
+    position: absolute;
+    left: 50%; 
+    transform: translateX(-50%); 
+    bottom: 20%; 
+    font-size: 3em; 
+    color: white; 
+    opacity: 0; 
+    animation: showText 0.5s forwards, hideText 0.5s forwards; 
+    animation-delay: 3s, 6s;
+    background-color: orange;
+}
+.settings {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    z-index: 1000;
+}
+
+.settings input[type="checkbox"] {
+    display: none;
+}
+
+.settings-label {
+    cursor: pointer;
+    font-size: 24px;
+    padding: 5px;
+    border-radius: 50%;
+}
+
+.settings-panel {
+    position: fixed;
+    bottom: 50px;
+    right: 10px;
+    width: 220px;
+    background-color: #fff;
+    padding: 10px;
+    display: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    border-radius: 5px;
+    font-family: sans-serif;
+}
+
+.settings input[type="checkbox"]:checked ~ .settings-panel {
+    display: block;
+}
+
+.settings-panel label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.settings-panel input[type="range"],
+.settings-panel input[type="color"] {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+</style>
+    <div class="content-wrapper">
+        <div class="striped-border" style="height: 65px;">Privacy Policy</div>
+        <div class="divider"></div>
+        <div class="privacy-content">
+            <h1></h1>
+            <h2>1. Data Collection and Use</h2>
+            <p>We may collect the following personal data:</p>
+            <ul>
+                <li>Name and contact details (e.g., phone number, email address)</li>
+                <li>Information about your vehicle for service provision</li>
+                <li>Information about your actions on our website (e.g., cookies)</li>
+            </ul>
+            <p><strong>Use of Data:</strong></p>
+            <ul>
+                <li>To provide services, such as scheduling vehicle maintenance</li>
+                <li>To inform you about our products and offers</li>
+                <li>To improve the quality of customer service</li>
+            </ul>
+
+            <h2>2. Data Transfer to Third Parties</h2>
+            <p>Your data may be transferred to third parties only in the following cases:</p>
+            <ul>
+                <li>To perform services (e.g., delivery of spare parts)</li>
+                <li>To comply with the law</li>
+                <li>With your prior consent</li>
+            </ul>
+
+            <h2>3. Data Protection</h2>
+            <p><strong>Gosha Cars</strong> takes all measures to protect your data from unauthorized access, alteration, or destruction. Modern encryption and data protection technologies are used.</p>
+
+            <h2>4. Your Rights</h2>
+            <p>You have the right to:</p>
+            <ul>
+                <li>Access your personal data</li>
+                <li>Request correction or deletion of data</li>
+                <li>Limit or stop data processing</li>
+                <li>Withdraw consent for data processing</li>
+            </ul>
+            <p class="quote">I said only pussies run nitrometh</p>
+            <p>For more information, visit our <a href="#terms">Terms and Conditions</a></p>
+        </div>
+        <div class="divider"></div>
+        <div class="striped-border" style="height: 40px;"></div>   
+    </div>
+    <div class="settings">
+        <input type="checkbox" id="toggle-settings" />
+        <label for="toggle-settings" class="settings-label">⚙️</label>
+        <div class="settings-panel">
+            <label for="font-size">Font Size:</label>
+            <input type="range" id="font-size" min="10" max="30" value="16">
+            <label for="text-color">Text Color:</label>
+            <input type="color" id="text-color" value="#FFFFFF">
+            <label for="bg-color">Background Color:</label>
+            <input type="color" id="bg-color" value="#000000">
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var fontSizeInput = document.getElementById('font-size');
+            var textColorInput = document.getElementById('text-color');
+            var bgColorInput = document.getElementById('bg-color');
+    
+            var privacyContent = document.querySelector('.privacy-content');
+            var contentWrapper = document.querySelector('.content-wrapper');
+    
+            fontSizeInput.addEventListener('input', function() {
+                privacyContent.style.fontSize = fontSizeInput.value + 'px';
+            });
+    
+            textColorInput.addEventListener('input', function() {
+                privacyContent.style.color = textColorInput.value;
+            });
+    
+            bgColorInput.addEventListener('input', function() {
+                privacyContent.style.backgroundColor = bgColorInput.value;
+            });
+        });
+    </script>
+    
+{% endblock %}

@@ -1,0 +1,339 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}About Us{% endblock %}
+
+{% block content %}
+<style>
+    .content-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+        width: 90%;
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(5, 5, 5, 0.9),
+            rgba(5, 5, 5, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 15px
+        );
+    }
+    .certificate {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 50px auto;
+        width: 60%;
+        height: 80vh;
+        background-image: url("{% static 'background/cover3.jpg' %}");
+        background-size: cover;
+        background-position: center;
+        border: 20px solid transparent;
+        -webkit-border-image: url("{% static 'textures/blackplastic.jpg' %}") 30 stretch;
+        border-image: url("{% static 'textures/blackplastic.jpg' %}") 30 stretch;
+        font-family: 'SolidenTrialBold', sans-serif;
+        position: relative;
+        z-index: 1;
+        color: white;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+    .company-logo {
+        position: absolute;
+        top: 2%;
+        right: 2%;
+        width: 300px;
+        height: auto;
+    }
+    .certificate-info {
+        font-family: 'Inkulinati-Regular', sans-serif;
+        position: absolute;
+        top: 5%;
+        left: 2%;
+        color: white;
+        font-size: 1.5vw;
+        text-align: right;
+    }
+    .small-info {
+        position: absolute;
+        bottom: 1%;
+        color: #FFFFFF;
+        font-size: 0.9vw;
+    }
+    .qr-code {
+        position: absolute;
+        bottom: 5%;
+        right: 5%;
+        width: 100px;
+        height: 100px;
+    }
+    h1, h2, h3 { 
+        text-align: center;
+        letter-spacing: 1px;   /*селектор элемента*/
+        margin: 0;
+    }
+    .video-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0;
+    }
+    .about-logo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(5, 5, 5, 0.9),
+            rgba(5, 5, 5, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 15px
+        );
+    }
+    .about-history li {
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(0, 0, 0, 0.9),
+            rgba(0, 0, 0, 0.9) 8px,
+            rgba(10, 10, 10, 0.9) 8px,
+            rgba(10, 10, 10, 0.9) 15px
+        );
+        font-family: 'Inkulinati-Regular', sans-serif;
+        -webkit-text-stroke: 0.1px black;
+        list-style-type: none;
+    }
+    .about-history {
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(0, 0, 0, 0.9),
+            rgba(0, 0, 0, 0.9) 8px,
+            rgba(10, 10, 10, 0.9) 8px,
+            rgba(10, 10, 10, 0.9) 15px
+        );
+        animation: moveStripes 30s linear infinite;
+        background-size: 70px 180px;
+        padding: 10px;
+    }
+    .footer {
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(0, 0, 0, 0.9),
+            rgba(0, 0, 0, 0.9) 8px,
+            rgba(10, 10, 10, 0.9) 8px,
+            rgba(10, 10, 10, 0.9) 15px
+        );
+        background-size: 70px 180px;
+        animation: moveStripes 30s linear infinite;
+        text-align: center;
+        padding: 20px 0;
+        position: relative;
+        width: 100%;
+        bottom: 0;
+        border-top: 2px solid black;
+    }
+    .footer-details {
+        font-family: 'Inkulinati-Regular', sans-serif;
+        font-size: 0.9em;
+    }
+    .logo-image {
+        transition-duration:1s;
+        height: auto;
+        width: 350px;
+    }
+    .logo-image:hover{
+        transform: scale(1.1);
+    }
+    .video-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0;
+        border: 5px solid black;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    .chart-container {
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        margin: 50px;
+        animation: fadeIn 2s ease-in-out;
+    }
+    #chart {
+        max-width: 800px;
+        height: 500px;
+    }
+    /* Стиль кнопки сохранения графика */
+    .save-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        margin: 20px auto;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+    .save-button:hover {
+        background-color: #f0f0f0;
+        transform: scale(1.05);
+    }
+    
+    /* Анимация полос */
+    @keyframes moveStripes {
+        0% { background-position: 0 0; }
+        100% { background-position: 100px 0; }
+    }
+
+</style>
+
+<article class="content-wrapper">
+    <section class="description-div">
+        <div class="about-logo">
+            <img class="logo-image" src="{{ company.logo.url }}" alt="{{ company.name }} logo">
+        </div>
+        
+        <figure class="video-section">
+            <video width="700" height="400" controls>
+                <source src="{{ company.video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </figure>
+        
+        <section class="about-history">
+            <h3 style="font-size:30px;">Our history</h3>
+            <p>{{ company.history | safe }}</p>
+        </section>
+
+        <figure class="certificate">
+            <img class="company-logo" src="{{ company.logo.url }}" alt="Company Logo">
+            <div class="certificate-info">
+                Certificate of Excellence<br>
+                Issued to: InDaHood<br>
+                Date: 01.05.2005
+            </div>
+            <div class="small-info">
+                This certificate is awarded in recognition of<br>
+                outstanding achievements in the field of service.
+            </div>
+            <img class="qr-code" src="{% static 'background/Untitled.jpeg' %}" alt="QR Code">
+        </figure>
+    </section>
+    
+</article>
+<!-- Контейнер для графика -->
+<div class="chart-container">
+    <canvas id="chart"></canvas>
+</div>
+
+<!-- Кнопка для сохранения графика -->
+<div style="text-align: center;">
+    <button id="save-chart" class="save-button">Сохранить график как изображение</button>
+</div>
+
+<footer class="footer">
+    <div class="footer-details company-details-container">
+        {{ company.details | safe }}
+    </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.1.0"></script>
+<script>
+    // Данные для графика
+    const xValues = [];
+    const seriesValues = [];
+    const mathValues = [];
+    const epsValues = [];
+    const nTerms = 10; // количество просуммированных членов ряда
+    const step = 0.1;
+
+    for (let x = -0.9; x <= 0.9; x += step) {
+        x = parseFloat(x.toFixed(2)); // точность до двух знаков после запятой
+        xValues.push(x);
+        let seriesSum = 0;
+        for (let n = 0; n < nTerms; n++) {
+            seriesSum += Math.pow(x, n);
+        }
+        seriesValues.push(seriesSum);
+        const mathValue = 1 / (1 - x);
+        mathValues.push(mathValue);
+        const eps = Math.abs(seriesSum - mathValue);
+        epsValues.push(eps);
+    }
+
+    const ctx = document.getElementById('chart').getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [
+                {
+                    label: 'F(x) - Разложение в ряд',
+                    data: [],
+                    borderColor: 'red',
+                    fill: false,
+                    pointRadius: 3,
+                    borderWidth: 2,
+                    tension: 0.1,
+                },
+                {
+                    label: 'Math F(x) = 1 / (1 - x)',
+                    data: [],
+                    borderColor: 'blue',
+                    fill: false,
+                    pointRadius: 3,
+                    borderWidth: 2,
+                    tension: 0.1,
+                },
+                {
+                    label: 'Погрешность eps',
+                    data: [],
+                    borderColor: 'green',
+                    fill: false,
+                    pointRadius: 3,
+                    borderWidth: 2,
+                    yAxisID: 'y-axis-eps',
+                    tension: 0.1,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                title: {
+                    display: true,
+                    text: `Графики F(x), Math F(x) и погрешности eps при n = ${nTerms}`,
+                    font: { size: 20 },
+                },
+            },
+            scales: {
+                x: { title: { display: true, text: 'x', font: { size: 16 } } },
+                y: { title: { display: true, text: 'F(x) и Math F(x)', font: { size: 16 } }, position: 'left' },
+                'y-axis-eps': {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    title: { display: true, text: 'Погрешность eps', font: { size: 16 } },
+                    grid: { drawOnChartArea: false },
+                },
+            },
+        },
+    });
+
+    // Функция пошагового добавления данных
+    let currentStep = 0;
+    function addNextStep() {
+        if (currentStep < xValues.length) {
+            chart.data.labels.push(xValues[currentStep]);
+            chart.data.datasets[0].data.push(seriesValues[currentStep]);
+            chart.data.datasets[1].data.push(mathValues[currentStep]);
+            chart.data.datasets[2].data.push(epsValues[currentStep]);
+            chart.update();
+            currentStep++;
+        } else {
+            clearInterval(stepInterval); // Остановить обновление, когда все данные добавлены
+        }
+    }
+
+    // Запуск обновления шагов с интервалом
+    const stepInterval = setInterval(addNextStep, 500); // интервал в миллисекундах
+</script>
+
+{% endblock %}

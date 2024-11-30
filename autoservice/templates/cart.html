@@ -1,0 +1,193 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Cart
+{% endblock %}
+
+{% block content %}
+<style>
+    
+    .cart-container {
+        font-family: 'Inkulinati-Regular', sans-serif;
+        letter-spacing: 1px;
+        width: 70%;
+        margin: auto;
+        margin-top: 20px;
+        border: 5px solid #3b3b3b;
+    }
+
+    .cart-header {
+        border: 1px solid black;
+        text-align: center;
+        width: 100%;
+        background-color: black;
+        -webkit-text-stroke: 0.2px black;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .cart-footer {
+        text-align: center;
+        width: 100%;
+        background: repeating-linear-gradient(
+            -35deg,
+            rgba(20, 20, 20, 0.9),
+            rgba(20, 20, 20, 0.9) 10px,
+            rgba(51, 51, 51, 0.9) 10px,
+            rgba(51, 51, 51, 0.9) 20px
+        );
+        height: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-bottom: 5px;
+    }
+
+    .cart-items-header {
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        background: repeating-linear-gradient(
+            -35deg,
+            rgba(20, 20, 20, 0.9), 
+            rgba(20, 20, 20, 0.9) 10px,
+            rgba(51, 51, 51, 0.9) 10px, 
+            rgba(51, 51, 51, 0.9) 20px
+        );
+        font-size: 20px;
+    }
+
+    .cart-list-body {
+        background: repeating-linear-gradient(
+            -40deg,
+            rgba(5, 5, 5, 0.9), 
+            rgba(5, 5, 5, 0.9) 8px,
+            rgba(18, 18, 18, 0.9) 8px, 
+            rgba(18, 18, 18, 0.9) 15px
+        );
+        height: 400px;
+        overflow-y: auto;
+        padding-left: 10px;
+        margin: 0;
+        list-style: none;
+    }
+
+   
+    .cart-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 10px 0;
+        border-bottom: 1px solid #3b3b3b;
+        padding-bottom: 10px;
+    }
+
+    .cart-item-details {
+        display: flex;
+        flex-direction: column;
+        max-width: 70%;
+    }
+
+   
+    .cart-item-actions {
+        display: flex;
+        align-items: center; 
+        justify-content: center; 
+        gap: 10px;
+    }
+
+   
+    .cart-button {
+        color: #cf9000;
+        background-color: #404040;
+        border: 1px solid black;
+        height: 30px;
+        width: 80px;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .cart-button:hover {
+        border-color: #a37303;
+    }
+
+    .cart-input-field {
+        border: 2px solid #454545;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #cf9000;
+        font-size: 16px;
+        outline: none;
+        transition: border-color 0.3s, background-color 0.3s;
+        width: 200px;
+    }
+
+    .cart-input-field:focus {
+        border-color: #a37303;
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+
+</style>
+
+<article class="cart-container">
+    <div class="cart-header">
+        <h1>Cart</h1>
+    </div>
+
+    <div class="cart-items-header">
+        <p>Product</p>
+    </div>
+
+    <ul class="cart-items cart-list-body">
+        {% for cart_product in cartproduct_set %}
+            <li>
+                <div class="cart-item">
+                    <!-- Левая часть: Название и цена -->
+                    <div class="cart-item-details">
+                        <h2 class="cart-text">{{ cart_product.product.name }}</h2>
+                        <p class="cart-info">Price: ${{ cart_product.product.price }}</p>
+                    </div>
+
+                    <!-- Правая часть: Количество и кнопки -->
+                    <div class="cart-item-actions">
+                        <form action="{% url 'decrease_quantity' cart_product.id %}" method="post">
+                            {% csrf_token %}
+                            <button class="cart-button" type="submit">-</button>
+                        </form>
+
+                        <p class="cart-info">{{ cart_product.quantity }}</p>
+
+                        <form action="{% url 'increase_quantity' cart_product.id %}" method="post">
+                            {% csrf_token %}
+                            <button class="cart-button" type="submit">+</button>
+                        </form>
+
+                        <form action="{% url 'remove_from_cart' cart_product.id %}" method="post">
+                            {% csrf_token %}
+                            <button class="cart-button" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="cart-footer">
+        <footer>
+            <p>Total: <strong>${{ total_price }}</strong></p>
+            <form action="{% url 'complete_order' %}" method="post">
+                {% csrf_token %}
+                <label for="address">Address:</label>
+                <input class="cart-input-field" type="text" id="address" name="address" required>
+                <button class="cart-button" type="submit">Confirm</button>
+            </form>
+        </footer>
+    </div>
+</article>
+{% endblock %}
